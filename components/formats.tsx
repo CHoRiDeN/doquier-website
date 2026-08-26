@@ -1,3 +1,5 @@
+import { GeneratingBlobOverlay } from "./ui/generating-blob";
+
 const formats = [
   {
     name: "Travel",
@@ -33,6 +35,10 @@ export function Formats() {
             life.
           </p>
         </div>
+      
+      <div className="relative w-[500px] h-[500px]">
+      <GeneratingBlobOverlay/>
+      </div>
 
         <ul className="mt-14 grid gap-12 border-t border-foreground/10 pt-12 sm:mt-16 sm:grid-cols-3 sm:gap-10 sm:pt-14">
           {formats.map((format) => (

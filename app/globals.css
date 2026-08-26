@@ -166,4 +166,81 @@
   .hero-enter {
     animation: none;
   }
+
+  .hero-video-pop {
+    animation: none;
+  }
+}
+
+.hero-video-pop {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.01);
+  transform-origin: center center;
+  animation-name: hero-video-pop;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes hero-video-pop {
+  0% {
+    opacity: 0;
+    transform:  scale(0.8);
+  }
+  20% {
+    opacity: 1;
+   
+  }
+  95% {
+    opacity: 1;
+
+  }
+  100% {
+    opacity: 0;
+    transform:  scale(1);
+  }
+}
+
+@keyframes blob-drift-1 {
+  0% {
+    transform: translate(0%, 0%) scale(1);
+  }
+  33% {
+    transform: translate(18%, 12%) scale(1.15);
+  }
+  66% {
+    transform: translate(-12%, 22%) scale(0.9);
+  }
+  100% {
+    transform: translate(8%, -8%) scale(1.08);
+  }
+}
+
+@keyframes blob-drift-2 {
+  0% {
+    transform: translate(0%, 0%) scale(1);
+  }
+  33% {
+    transform: translate(-22%, -18%) scale(1.12);
+  }
+  66% {
+    transform: translate(14%, -12%) scale(0.88);
+  }
+  100% {
+    transform: translate(-8%, 18%) scale(1.18);
+  }
+}
+
+
+.generating-blob {
+  will-change: transform;
+}
+
+.generating-blob-1 {
+  animation: blob-drift-1 8s ease-in-out infinite alternate;
+}
+
+.generating-blob-2 {
+  animation: blob-drift-2 10s ease-in-out infinite alternate;
+  animation-delay: -3s;
 }
