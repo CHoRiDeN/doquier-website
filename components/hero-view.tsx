@@ -22,10 +22,10 @@ export function HeroView() {
 
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6 py-16 text-center sm:px-10">
         <div className="flex w-full max-w-3xl flex-col items-center">
-          <h1 className="hero-enter font-heading text-balance text-6xl font-semibold leading-[1.05] tracking-[-0.03em] text-foreground">
+          <h1 className="hero-enter font-heading text-balance text-4xl  md:text-6xl font-semibold leading-[1.05] tracking-[-0.03em] text-foreground">
             Contenido UGC
             <br />
-            <span className="text-primary">casi </span> real en autopilot
+            <span className="text-secondary">casi </span> real en autopilot
           </h1>
 
           <p className="hero-enter hero-enter-delay-1 mt-6 max-w-2xl text-pretty text-base leading-relaxed text-foreground/80 sm:mt-8 sm:text-lg">
