@@ -185,7 +185,7 @@
 @keyframes hero-video-pop {
   0% {
     opacity: 0;
-    transform:  scale(0.8);
+    transform:  scale(0.4);
   }
   20% {
     opacity: 1;
@@ -243,4 +243,86 @@
 .generating-blob-2 {
   animation: blob-drift-2 10s ease-in-out infinite alternate;
   animation-delay: -3s;
+}
+
+.formats-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 4%,
+    black 96%,
+    transparent
+  );
+}
+
+.formats-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1.5rem;
+  padding-inline: 1rem;
+  animation: formats-marquee 150s linear infinite;
+}
+
+.formats-marquee-set {
+  display: flex;
+  gap: 3rem;
+}
+
+@keyframes formats-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .formats-marquee-track {
+    animation: none;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .formats-marquee-set[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+.ahead-marquee {
+  overflow: hidden;
+}
+
+.ahead-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1.5rem;
+  animation: ahead-marquee 32s linear infinite;
+}
+
+.ahead-marquee-set {
+  display: flex;
+  gap: 1.5rem;
+}
+
+@keyframes ahead-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ahead-marquee-track {
+    animation: none;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .ahead-marquee-set[aria-hidden="true"] {
+    display: none;
+  }
 }
