@@ -23,7 +23,7 @@ const HERO_VIDEOS = [
   "/videos/hero/18.mp4"
 ] as const;
 
-const RADIAL_COUNT = 16;
+const RADIAL_COUNT = 18;
 const SPAWN_MS = 1000;
 const MIN_RADIUS_PX = 450;
 const WIDTH_MIN = 85;
