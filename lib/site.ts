@@ -4,6 +4,33 @@
  */
 export const FORM_URL = "#start";
 
+/** Production origin. Set NEXT_PUBLIC_SITE_URL once the domain is final. */
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://doquier.com").replace(/\/$/, "");
+
+export const SITE = {
+  name: "Doquier",
+  title: "Doquier — UGC ads that look real, made with AI",
+  tagline: "UGC that looks real. Made on autopilot.",
+  description:
+    "Doquier is an AI UGC studio for European performance brands. We script, produce and deliver creator-style video ads in every format and European language, at up to 80% less than traditional UGC.",
+  shortDescription: "AI-made UGC video ads for European performance brands, delivered in 72 hours.",
+  locale: "en_GB",
+  keywords: [
+    "AI UGC",
+    "UGC ads",
+    "AI video ads",
+    "user-generated content",
+    "creator ads",
+    "performance creative",
+    "TikTok ads",
+    "Meta ads",
+    "Reels ads",
+    "ad creative agency",
+    "AI avatars",
+    "Europe",
+  ],
+} as const;
+
 export const NAV_LINKS = [
   { label: "Formats", href: "#formats" },
   { label: "Process", href: "#process" },
@@ -59,6 +86,18 @@ export const LANGUAGES = [
   "PORTUGUÊS",
   "NEDERLANDS",
   "POLSKI",
+] as const;
+
+/** English names of LANGUAGES, for metadata, structured data and llms.txt. */
+export const LANGUAGE_NAMES = [
+  "English",
+  "Spanish",
+  "French",
+  "German",
+  "Italian",
+  "Portuguese",
+  "Dutch",
+  "Polish",
 ] as const;
 
 export type Format = {

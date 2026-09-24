@@ -8,10 +8,12 @@ import { Process } from "@/components/sections/process";
 import { Results } from "@/components/sections/results";
 import { SiteNav } from "@/components/sections/site-nav";
 import { UseCases } from "@/components/sections/use-cases";
+import { StructuredData } from "@/components/structured-data";
 
 export default function Home() {
   return (
     <>
+      <StructuredData />
       <a
         href="#main"
         className="sr-only z-[70] rounded-full bg-foreground px-4 py-2 text-background focus:not-sr-only focus:fixed focus:top-4 focus:left-4"

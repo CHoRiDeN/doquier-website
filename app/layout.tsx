@@ -3,6 +3,7 @@ import { Geist_Mono, Instrument_Serif, Schibsted_Grotesk } from "next/font/googl
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
+import { SITE, SITE_URL } from "@/lib/site";
 
 const schibstedGrotesk = Schibsted_Grotesk({
   variable: "--font-sans",
@@ -22,16 +23,46 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Doquier — UGC ads that look real, made with AI",
-  description:
-    "Doquier scripts, produces and delivers creator-style video ads with AI for European performance brands. Every format, in every language, at up to 80% less than traditional UGC.",
-  openGraph: {
-    title: "Doquier — UGC ads that look real, made with AI",
-    description:
-      "Creator-style video ads for performance brands. Every format, every European language, delivered in 72 hours.",
-    type: "website",
-    locale: "en_GB",
+  metadataBase: new URL(SITE_URL),
+  title: { default: SITE.title, template: `%s — ${SITE.name}` },
+  description: SITE.description,
+  applicationName: SITE.name,
+  keywords: [...SITE.keywords],
+  authors: [{ name: SITE.name, url: SITE_URL }],
+  creator: SITE.name,
+  publisher: SITE.name,
+  category: "marketing",
+  alternates: {
+    canonical: "/",
+    languages: { "en-GB": "/", "x-default": "/" },
+    types: { "text/markdown": "/llms.txt" },
   },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: SITE.name,
+    title: SITE.title,
+    description: SITE.shortDescription,
+    locale: SITE.locale,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.title,
+    description: SITE.shortDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+      "max-snippet": -1,
+    },
+  },
+  appleWebApp: { title: SITE.name, statusBarStyle: "black-translucent" },
+  formatDetection: { telephone: false, email: false, address: false },
 };
 
 export const viewport: Viewport = {
