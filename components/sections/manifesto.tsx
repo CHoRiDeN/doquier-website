@@ -1,6 +1,8 @@
 "use client";
 
 import { useRef } from "react";
+import { FORM_URL } from "@/lib/site";
+import { CtaLink } from "@/components/motion/cta-link";
 import { ScrambleLabel } from "@/components/motion/scramble-label";
 import { gsap, MQ, SplitText, useGSAP } from "@/lib/gsap";
 
@@ -43,6 +45,9 @@ export function Manifesto() {
           not every quarter. <span className="font-serif-accent text-accent-warm">Doquier</span> closes that gap: native
           UGC, scripted by strategists and produced by AI, delivered in the time it takes to brief a single creator.
         </p>
+        <CtaLink href={FORM_URL} className="mt-12">
+          Start your project
+        </CtaLink>
       </div>
     </section>
   );

@@ -9,6 +9,8 @@ type CtaLinkProps = ComponentProps<"a"> & {
   size?: "md" | "lg";
   magnetic?: boolean;
   arrow?: boolean;
+  /** Stretch to the container width on phones (below sm). */
+  fullWidthMobile?: boolean;
 };
 
 /** Pill link with a curved fill, a rolling label and a magnetic pull on fine pointers. */
@@ -17,6 +19,7 @@ export function CtaLink({
   size = "md",
   magnetic = true,
   arrow = true,
+  fullWidthMobile = true,
   className,
   children,
   ...props
@@ -57,6 +60,7 @@ export function CtaLink({
       className={cn(
         "group/cta relative isolate inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-medium tracking-[-0.01em] whitespace-nowrap outline-none transition-[color,border-color] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] focus-visible:ring-2 focus-visible:ring-accent-warm focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         size === "lg" ? "h-13 px-7 text-[15px]" : "h-10 px-5 text-sm",
+        fullWidthMobile && "max-sm:w-full",
         variant === "primary"
           ? "bg-foreground text-background"
           : "border border-foreground/15 text-foreground hover:border-transparent hover:text-background",

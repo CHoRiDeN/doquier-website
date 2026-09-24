@@ -1,12 +1,13 @@
 "use client";
 
 import { useRef } from "react";
+import { CtaLink } from "@/components/motion/cta-link";
 import { LazyVideo } from "@/components/motion/lazy-video";
 import { SoundVideo } from "@/components/motion/sound-video";
 import { ScrambleLabel } from "@/components/motion/scramble-label";
 import { SplitReveal } from "@/components/motion/split-reveal";
 import { gsap, MQ, ScrollTrigger, useGSAP } from "@/lib/gsap";
-import { COMPARISON, COMPETITORS } from "@/lib/site";
+import { COMPARISON, COMPETITORS, FORM_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 function Cell({ value, highlight }: { value: string | boolean; highlight?: boolean }) {
@@ -106,8 +107,8 @@ export function Compare() {
         </div>
       </div>
 
-      <div className="container-site mt-16 flex items-center gap-6 sm:gap-10">
-        <figure className="relative z-10 w-[44vw] max-w-[300px] shrink-0 sm:w-[260px]">
+      <div className="container-site mt-16 flex flex-col items-center gap-6 sm:flex-row sm:gap-10">
+        <figure className="relative z-10 w-[62vw] max-w-[300px] shrink-0 sm:w-[260px]">
           <div
             data-doquier-card
             className="relative aspect-[9/16] overflow-hidden rounded-3xl bg-muted shadow-[0_40px_120px_-30px_rgb(195_184_168/0.35)] ring-1 ring-accent-warm/60"
@@ -129,12 +130,12 @@ export function Compare() {
           vs
         </span>
 
-        <div className="relative min-w-0 flex-1 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+        <div className="relative w-full min-w-0 sm:w-auto sm:flex-1 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
           <div data-marquee className="flex w-max gap-4 sm:gap-5">
             {[0, 1].map((copy) => (
               <ul key={copy} aria-hidden={copy === 1} className="flex gap-4 sm:gap-5">
                 {COMPETITORS.map((c) => (
-                  <li key={c.name} className="w-[30vw] max-w-[190px] shrink-0 sm:w-[170px]">
+                  <li key={c.name} className="w-[38vw] max-w-[190px] shrink-0 sm:w-[170px]">
                     <div className="relative aspect-[9/16] overflow-hidden rounded-2xl bg-muted opacity-80 ring-1 ring-line saturate-[0.85]">
                       <LazyVideo src={c.src} poster={c.poster} rootMargin="0px" className="h-full w-full object-cover" />
                     </div>
@@ -197,6 +198,9 @@ export function Compare() {
             </tbody>
           </table>
         </div>
+        <CtaLink href={FORM_URL} className="mt-12">
+          Get ads that look real
+        </CtaLink>
       </div>
     </section>
   );

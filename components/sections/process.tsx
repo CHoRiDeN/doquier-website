@@ -1,10 +1,11 @@
 "use client";
 
 import { useRef } from "react";
+import { CtaLink } from "@/components/motion/cta-link";
 import { ScrambleLabel } from "@/components/motion/scramble-label";
 import { SplitReveal } from "@/components/motion/split-reveal";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
-import { PROCESS } from "@/lib/site";
+import { FORM_URL, PROCESS } from "@/lib/site";
 
 /** Process Rail: a progress line draws down the steps and lights each one as it passes. */
 export function Process() {
@@ -88,6 +89,9 @@ export function Process() {
             No casting calls, no shipping samples, no chasing creators for revisions. You brief once; we handle strategy,
             production and iteration.
           </p>
+          <CtaLink href={FORM_URL} className="mt-10 hidden lg:inline-flex">
+            Send your brief
+          </CtaLink>
         </div>
 
         <div data-steps className="relative">
@@ -123,6 +127,11 @@ export function Process() {
             </li>
           ))}
           </ol>
+        </div>
+
+        {/* On mobile the CTA follows the steps instead of the intro. */}
+        <div className="lg:hidden">
+          <CtaLink href={FORM_URL}>Send your brief</CtaLink>
         </div>
       </div>
     </section>

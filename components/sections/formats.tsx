@@ -97,10 +97,11 @@ export function Formats() {
           >
             Every format. <span className="font-serif-accent text-accent-warm">One studio.</span>
           </SplitReveal>
-       
         </div>
 
-        <div aria-hidden className="hidden w-64 items-center gap-4 font-mono text-xs text-muted-foreground lg:flex">
+        <div className="hidden flex-col items-end gap-8 lg:flex">
+          <CtaLink href={FORM_URL}>Get these formats</CtaLink>
+        <div aria-hidden className="flex w-64 items-center gap-4 font-mono text-xs text-muted-foreground">
           <span className="tabular-nums text-foreground">
             <span ref={counterRef}>01</span>
           </span>
@@ -108,6 +109,7 @@ export function Formats() {
             <span data-progress className="absolute inset-0 origin-left scale-x-0 bg-accent-warm" />
           </span>
           <span className="tabular-nums">{pad(FORMATS.length)}</span>
+        </div>
         </div>
       </div>
 
@@ -162,6 +164,11 @@ export function Formats() {
             </div>
           </li>
         </ul>
+      </div>
+
+      {/* Below lg the CTA closes the section after the swipe rail; on desktop it sits in the header. */}
+      <div className="container-site mt-12 lg:hidden">
+        <CtaLink href={FORM_URL}>Get these formats</CtaLink>
       </div>
     </section>
   );

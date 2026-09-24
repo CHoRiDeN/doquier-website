@@ -51,7 +51,7 @@ export function FinalCta() {
             Tell us about your brand and goals. We&apos;ll reply within one business day with sample concepts and a
             proposal.
           </p>
-          <div data-cta-fade className="mt-10">
+          <div data-cta-fade className="mt-10 max-sm:w-full">
             <CtaLink href={FORM_URL} size="lg">
               Start your project
             </CtaLink>

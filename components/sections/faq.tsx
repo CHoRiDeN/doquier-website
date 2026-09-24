@@ -1,9 +1,10 @@
 "use client";
 
 import { useId, useState } from "react";
+import { CtaLink } from "@/components/motion/cta-link";
 import { ScrambleLabel } from "@/components/motion/scramble-label";
 import { SplitReveal } from "@/components/motion/split-reveal";
-import { FAQ as ITEMS } from "@/lib/site";
+import { FAQ as ITEMS, FORM_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 /** Morphing accordion: panels ease to their natural height, the plus morphs into a minus. */
@@ -24,6 +25,10 @@ export function Faq() {
           >
             Questions, <span className="font-serif-accent text-accent-warm">answered.</span>
           </SplitReveal>
+          <p className="mt-6 max-w-xs text-pretty text-foreground/60">Still unsure? We&apos;ll answer anything else on a call.</p>
+          <CtaLink href={FORM_URL} className="mt-8">
+            Talk to us
+          </CtaLink>
         </div>
 
         <ul className="border-t border-line">

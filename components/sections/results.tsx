@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { CtaLink } from "@/components/motion/cta-link";
 import { ScrambleLabel } from "@/components/motion/scramble-label";
 import { SplitReveal } from "@/components/motion/split-reveal";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
-import { LANGUAGES, METRICS } from "@/lib/site";
+import { FORM_URL, LANGUAGES, METRICS } from "@/lib/site";
 
 const FLAP_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZÇÊÑ";
 const FLAP_CELLS = Math.max(...LANGUAGES.map((l) => l.length));
@@ -161,6 +162,9 @@ export function Results() {
             offer and spend.
           </p>
         </div>
+        <CtaLink href={FORM_URL} className="mt-14">
+          Start your project
+        </CtaLink>
       </div>
     </section>
   );

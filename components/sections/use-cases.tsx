@@ -1,10 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { CtaLink } from "@/components/motion/cta-link";
 import { ScrambleLabel } from "@/components/motion/scramble-label";
 import { SplitReveal } from "@/components/motion/split-reveal";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
-import { USE_CASES } from "@/lib/site";
+import { FORM_URL, USE_CASES } from "@/lib/site";
 
 /** Poster until clicked, then plays the full clip with sound and native controls. */
 function PlayableVideo({ src, poster, title }: { src: string; poster: string; title: string }) {
@@ -92,6 +93,9 @@ export function UseCases() {
             </li>
           ))}
         </ul>
+        <CtaLink href={FORM_URL} className="mt-14">
+          Start your project
+        </CtaLink>
       </div>
     </section>
   );

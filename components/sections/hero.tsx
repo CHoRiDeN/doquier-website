@@ -46,10 +46,10 @@ export function Hero() {
       <div data-hero-copy className="flex flex-1 flex-col items-center justify-center px-6 pt-20 text-center">
         <div data-hero-exclude className="flex max-w-3xl flex-col items-center">
           <p
-            className="hero-fade mb-7 inline-flex items-center gap-2.5 rounded-full border border-line bg-background/40 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/70 backdrop-blur-md"
+            className="hero-fade mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-background/40 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-foreground/70 backdrop-blur-md sm:mb-7 sm:gap-2.5 sm:px-3.5 sm:py-1.5 sm:text-[11px] sm:tracking-[0.18em]"
             style={delay(0)}
           >
-            <span aria-hidden className="size-1.5 animate-pulse rounded-full bg-accent-warm" />
+            <span aria-hidden className="size-1 animate-pulse rounded-full bg-accent-warm sm:size-1.5" />
             AI UGC studio for performance brands
           </p>
 
@@ -75,7 +75,7 @@ export function Hero() {
             every language.
           </p>
 
-          <div className="hero-fade mt-10 flex flex-wrap items-center justify-center gap-3" style={delay(0.42)}>
+          <div className="hero-fade mt-10 flex flex-wrap items-center justify-center gap-3 max-sm:w-full" style={delay(0.42)}>
             <CtaLink href={FORM_URL} size="lg">
               Start your project
             </CtaLink>
