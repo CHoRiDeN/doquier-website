@@ -1,15 +1,35 @@
-import { Ahead } from "@/components/ahead";
-import { Formats } from "@/components/formats";
-import { Hero } from "@/components/hero";
-import { Reviews } from "@/components/reviews";
+import { Compare } from "@/components/sections/compare";
+import { Faq } from "@/components/sections/faq";
+import { FinalCta } from "@/components/sections/final-cta";
+import { Formats } from "@/components/sections/formats";
+import { Hero } from "@/components/sections/hero";
+import { Manifesto } from "@/components/sections/manifesto";
+import { Process } from "@/components/sections/process";
+import { Results } from "@/components/sections/results";
+import { SiteNav } from "@/components/sections/site-nav";
+import { UseCases } from "@/components/sections/use-cases";
 
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col">
-      <Hero />
-      <Formats />
-      <Reviews />
-      <Ahead />
-    </main>
+    <>
+      <a
+        href="#main"
+        className="sr-only z-[70] rounded-full bg-foreground px-4 py-2 text-background focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
+      >
+        Skip to content
+      </a>
+      <SiteNav />
+      <main id="main" className="flex flex-1 flex-col">
+        <Hero />
+        <Manifesto />
+        <Formats />
+        <Process />
+        <Results />
+        <Compare />
+        <UseCases />
+        <Faq />
+        <FinalCta />
+      </main>
+    </>
   );
 }

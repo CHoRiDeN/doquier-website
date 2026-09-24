@@ -25,7 +25,7 @@ export function Reviews() {
       <WebsiteShaderCanvas
         preset="aurora-veil"
         tone="dark"
-        className="px-4 py-16  sm:px-8 sm:py-24 "
+        className="px-4 py-16 sm:px-8 sm:py-24"
       >
         <h2 id="reviews-heading" className="sr-only">
           Product and service reviews

@@ -138,7 +138,7 @@ export const websiteShaderPresets: WebsiteShaderPreset[] = [
     accent: "#5c564c",
     interactive: false,
     preview: {
-      dark: "radial-gradient(circle at 30% 24%, rgba(80,74,66,0.1), transparent 31%), radial-gradient(circle at 80% 72%, rgba(45,42,38,0.14), transparent 34%), linear-gradient(140deg, #0a0a0b, #101112 55%, #070708)",
+      dark: "radial-gradient(circle at 30% 24%, rgba(120,112,100,0.14), transparent 31%), radial-gradient(circle at 80% 72%, rgba(70,66,60,0.18), transparent 34%), linear-gradient(140deg, #0e0e0f, #141516 55%, #09090a)",
       light:
         "radial-gradient(circle at 34% 22%, rgba(195,184,168,0.4), transparent 30%), radial-gradient(circle at 76% 72%, rgba(160,148,130,0.22), transparent 34%), linear-gradient(140deg, #f7f4ee, #eee7dc 55%, #fffaf0)",
     },
@@ -153,12 +153,12 @@ vec3 shaderColor(vec2 uv, vec2 p, float t, vec2 pointer, float intensity, float 
   float grain = fbm(q * 2.5 + t * 0.04);
   float edgeFade = smoothstep(0.0, 0.22, uv.y) * smoothstep(1.0, 0.78, uv.y);
 
-  vec3 base = mix(vec3(0.028, 0.028, 0.03), vec3(0.93, 0.91, 0.86), isLight);
-  vec3 cream = vec3(0.26, 0.24, 0.21);
-  vec3 stone = vec3(0.14, 0.13, 0.12);
-  vec3 color = base + (cream * veilA * 0.12 + stone * veilB * 0.1) * edgeFade;
-  color += (grain - 0.5) * 0.01 * edgeFade;
-  return color * (0.78 + intensity * 0.1);
+  vec3 base = mix(vec3(0.045, 0.045, 0.048), vec3(0.93, 0.91, 0.86), isLight);
+  vec3 cream = vec3(0.42, 0.39, 0.34);
+  vec3 stone = vec3(0.22, 0.21, 0.19);
+  vec3 color = base + (cream * veilA * 0.18 + stone * veilB * 0.14) * edgeFade;
+  color += (grain - 0.5) * 0.014 * edgeFade;
+  return color * (0.82 + intensity * 0.12);
 }
 `,
   },

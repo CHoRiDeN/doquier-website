@@ -1,41 +1,26 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 
-const HERO_VIDEOS = [
-  "/videos/hero/1.mp4",
-  "/videos/hero/2.mp4",
-  "/videos/hero/3.mp4",
-  "/videos/hero/4.mp4",
-  "/videos/hero/5.mp4",
-  "/videos/hero/6.mp4",
-  "/videos/hero/7.mp4",
-  "/videos/hero/8.mp4",
-  "/videos/hero/9.mp4",
-  "/videos/hero/10.mp4",
-  "/videos/hero/11.mp4",
-  "/videos/hero/12.mp4",
-  "/videos/hero/13.mp4",
-  "/videos/hero/14.mp4",
-  "/videos/hero/15.mp4",
-  "/videos/hero/16.mp4",
-  "/videos/hero/17.mp4",
-  "/videos/hero/18.mp4"
-] as const;
+const HERO_VIDEOS = Array.from({ length: 18 }, (_, i) => `/media/hero/${i + 1}.mp4`);
 
 const RADIAL_COUNT = 18;
-const SPAWN_MS = 1000;
-const MIN_RADIUS_PX = 450;
-const WIDTH_MIN = 85;
-const WIDTH_MAX = 130;
-const GROW_MS = 9000;
-const SPAWN_ATTEMPTS = 32;
-const OVERLAP_MARGIN_PX = 25;
-const INITIAL_COUNT = 7;
-const SEED_DELAY_MIN = 0.15;
-const SEED_DELAY_MAX = 0.85;
+const LIFETIME_MS = 9000;
+const SPAWN_ATTEMPTS = 40;
+const GAP_PX = 22;
 /** Angles start at top (-π/2), spaced evenly. */
 const ANGLE_OFFSET = -Math.PI / 2;
+
+/** `behindCopy`: small screens have no free space around the copy, so clips drift behind it instead. */
+type Layout = { spawnMs: number; maxLive: number; seed: number; wMin: number; wMax: number; behindCopy?: boolean };
+
+function layoutFor(width: number): Layout {
+  if (width < 640) return { spawnMs: 1500, maxLive: 6, seed: 4, wMin: 64, wMax: 92, behindCopy: true };
+  if (width < 1024) return { spawnMs: 1400, maxLive: 7, seed: 5, wMin: 70, wMax: 100 };
+  return { spawnMs: 1100, maxLive: 10, seed: 7, wMin: 86, wMax: 132 };
+}
+
+type Box = { x: number; y: number; w: number; h: number };
 
 type SpawnedVideo = {
   id: string;
@@ -43,194 +28,151 @@ type SpawnedVideo = {
   x: number;
   y: number;
   width: number;
-  animationDelayMs: number;
+  fromX: number;
+  fromY: number;
+  delayMs: number;
 };
 
-type Box = {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-};
+const rand = (min: number, max: number) => min + Math.random() * (max - min);
 
-function rand(min: number, max: number) {
-  return min + Math.random() * (max - min);
-}
-
-function pick<T>(items: readonly T[]): T {
-  return items[Math.floor(Math.random() * items.length)]!;
-}
-
-function videoHeight(width: number) {
-  return (width * 16) / 9;
-}
-
-function overlaps(a: Box, b: Box, margin = OVERLAP_MARGIN_PX) {
-  const aL = a.x - a.w / 2 - margin;
-  const aR = a.x + a.w / 2 + margin;
-  const aT = a.y - a.h / 2 - margin;
-  const aB = a.y + a.h / 2 + margin;
-  const bL = b.x - b.w / 2;
-  const bR = b.x + b.w / 2;
-  const bT = b.y - b.h / 2;
-  const bB = b.y + b.h / 2;
-  return aL < bR && aR > bL && aT < bB && aB > bT;
-}
-
-function overlapsAny(candidate: Box, others: readonly SpawnedVideo[]) {
-  return others.some((other) =>
-    overlaps(candidate, {
-      x: other.x,
-      y: other.y,
-      w: other.width,
-      h: videoHeight(other.width),
-    }),
+function overlaps(a: Box, b: Box) {
+  return (
+    a.x - a.w / 2 - GAP_PX < b.x + b.w / 2 &&
+    a.x + a.w / 2 + GAP_PX > b.x - b.w / 2 &&
+    a.y - a.h / 2 - GAP_PX < b.y + b.h / 2 &&
+    a.y + a.h / 2 + GAP_PX > b.y - b.h / 2
   );
 }
 
-/** Distance from center along angle to the section edge. */
-function rayEdgeDistance(
-  cx: number,
-  cy: number,
-  angle: number,
-  w: number,
-  h: number,
-) {
-  const dx = Math.cos(angle);
-  const dy = Math.sin(angle);
-  let tMax = Infinity;
-
-  if (dx > 1e-6) tMax = Math.min(tMax, (w - cx) / dx);
-  else if (dx < -1e-6) tMax = Math.min(tMax, -cx / dx);
-
-  if (dy > 1e-6) tMax = Math.min(tMax, (h - cy) / dy);
-  else if (dy < -1e-6) tMax = Math.min(tMax, -cy / dy);
-
-  return Number.isFinite(tMax) && tMax > 0 ? tMax : 0;
+/** Center-based boxes of every element marked data-hero-exclude, relative to root. */
+function exclusionBoxes(root: HTMLElement): Box[] {
+  const origin = root.getBoundingClientRect();
+  return [...(root.closest("section") ?? document).querySelectorAll<HTMLElement>("[data-hero-exclude]")].map((el) => {
+    const r = el.getBoundingClientRect();
+    return {
+      x: r.left - origin.left + r.width / 2,
+      y: r.top - origin.top + r.height / 2,
+      w: r.width + 24,
+      h: r.height + 24,
+    };
+  });
 }
 
-function tryPlaceVideo(
-  w: number,
-  h: number,
+function tryPlace(
+  root: HTMLElement,
+  layout: Layout,
   live: readonly SpawnedVideo[],
-  idBase: string,
-  nextSeq: () => number,
-  animationDelayMs: number,
+  makeId: () => string,
+  delayMs: number,
 ): SpawnedVideo | null {
+  const w = root.clientWidth;
+  const h = root.clientHeight;
   const cx = w / 2;
   const cy = h / 2;
+  const blocked = [
+    ...(layout.behindCopy ? [] : exclusionBoxes(root)),
+    ...live.map((v) => ({ x: v.x, y: v.y, w: v.width, h: (v.width * 16) / 9 })),
+  ];
+  const usedSrc = new Set(live.map((v) => v.src));
 
   for (let attempt = 0; attempt < SPAWN_ATTEMPTS; attempt++) {
-    const radial = Math.floor(Math.random() * RADIAL_COUNT);
-    const angle = ANGLE_OFFSET + (radial / RADIAL_COUNT) * Math.PI * 2;
-    const width = Math.round(rand(WIDTH_MIN, WIDTH_MAX));
-    const height = videoHeight(width);
-    const halfDiag = Math.hypot(width / 2, height / 2);
-
-    const edgeDist = rayEdgeDistance(cx, cy, angle, w, h);
-    const maxDist = Math.max(MIN_RADIUS_PX, edgeDist - halfDiag);
-    if (maxDist <= MIN_RADIUS_PX) continue;
-
-    const dist = rand(MIN_RADIUS_PX, maxDist);
+    const angle = ANGLE_OFFSET + (Math.floor(Math.random() * RADIAL_COUNT) / RADIAL_COUNT) * Math.PI * 2;
+    const width = Math.round(rand(layout.wMin, layout.wMax));
+    const height = (width * 16) / 9;
+    const dist = rand(Math.min(w, h) * 0.18, Math.hypot(cx, cy));
     const x = cx + Math.cos(angle) * dist;
     const y = cy + Math.sin(angle) * dist;
 
-    if (overlapsAny({ x, y, w: width, h: height }, live)) continue;
+    const inside = x - width / 2 > 8 && x + width / 2 < w - 8 && y - height / 2 > 8 && y + height / 2 < h - 8;
+    if (!inside) continue;
+    const box = { x, y, w: width, h: height };
+    if (blocked.some((b) => overlaps(box, b))) continue;
 
+    const pool = HERO_VIDEOS.filter((src) => !usedSrc.has(src));
     return {
-      id: `${idBase}-${nextSeq()}`,
-      src: pick(HERO_VIDEOS),
+      id: makeId(),
+      src: pool[Math.floor(Math.random() * pool.length)] ?? HERO_VIDEOS[0],
       x,
       y,
       width,
-      animationDelayMs,
+      // Start pulled toward the headline so each clip appears to fly out of it.
+      fromX: (cx - x) * 0.45,
+      fromY: (cy - y) * 0.45,
+      delayMs,
     };
   }
-
   return null;
 }
 
+/** Short AI-UGC clips that bloom outward around the hero headline. */
 export function HeroVideos() {
   const rootRef = useRef<HTMLDivElement>(null);
   const idBase = useId();
-  const seqRef = useRef(0);
-  const itemsRef = useRef<SpawnedVideo[]>([]);
+  const seq = useRef(0);
+  const liveRef = useRef<SpawnedVideo[]>([]);
   const [items, setItems] = useState<SpawnedVideo[]>([]);
-
-  itemsRef.current = items;
 
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const reducedMQ = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reducedMQ.matches) return;
-
-    const nextSeq = () => {
-      seqRef.current += 1;
-      return seqRef.current;
+    const makeId = () => `${idBase}-${++seq.current}`;
+    const commit = (next: SpawnedVideo[]) => {
+      liveRef.current = next;
+      setItems(next);
     };
+
+    let layout = layoutFor(root.clientWidth);
+    let timer = 0;
+    let visible = true;
 
     const spawn = () => {
-      const w = root.clientWidth;
-      const h = root.clientHeight;
-      if (w < 1 || h < 1) return;
-
-      const next = tryPlaceVideo(
-        w,
-        h,
-        itemsRef.current,
-        idBase,
-        nextSeq,
-        0,
-      );
-      if (!next) return;
-
-      itemsRef.current = [...itemsRef.current, next];
-      setItems(itemsRef.current);
+      if (!visible || document.hidden || liveRef.current.length >= layout.maxLive) return;
+      const next = tryPlace(root, layout, liveRef.current, makeId, 0);
+      if (next) commit([...liveRef.current, next]);
     };
 
-    const w = root.clientWidth;
-    const h = root.clientHeight;
-    if (w > 0 && h > 0) {
-      const seeded: SpawnedVideo[] = [];
-      for (let i = 0; i < INITIAL_COUNT; i++) {
-        const delayMs = -Math.round(
-          rand(SEED_DELAY_MIN, SEED_DELAY_MAX) * GROW_MS,
-        );
-        const placed = tryPlaceVideo(w, h, seeded, idBase, nextSeq, delayMs);
-        if (!placed) break;
-        seeded.push(placed);
-      }
-      itemsRef.current = seeded;
-      setItems(seeded);
+    // Seed a few mid-animation so the hero never starts empty.
+    const seeded: SpawnedVideo[] = [];
+    for (let i = 0; i < layout.seed; i++) {
+      const placed = tryPlace(root, layout, seeded, makeId, -Math.round(rand(0.2, 0.7) * LIFETIME_MS));
+      if (placed) seeded.push(placed);
     }
+    commit(seeded);
 
-    // First attempt immediately after seed; interval continues from there.
-    spawn();
-    const intervalId = window.setInterval(spawn, SPAWN_MS);
+    const start = () => {
+      window.clearInterval(timer);
+      timer = window.setInterval(spawn, layout.spawnMs);
+    };
+    start();
 
-    const onReducedChange = () => {
-      if (reducedMQ.matches) {
-        window.clearInterval(intervalId);
-        itemsRef.current = [];
-        setItems([]);
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+    });
+    io.observe(root);
+
+    const onResize = () => {
+      const next = layoutFor(root.clientWidth);
+      if (next.spawnMs !== layout.spawnMs) {
+        layout = next;
+        commit([]);
+        start();
       }
     };
-    reducedMQ.addEventListener("change", onReducedChange);
+    window.addEventListener("resize", onResize);
 
     return () => {
-      window.clearInterval(intervalId);
-      reducedMQ.removeEventListener("change", onReducedChange);
+      window.clearInterval(timer);
+      io.disconnect();
+      window.removeEventListener("resize", onResize);
     };
   }, [idBase]);
 
-  const removeItem = (id: string) => {
-    setItems((prev) => {
-      const next = prev.filter((item) => item.id !== id);
-      itemsRef.current = next;
-      return next;
-    });
+  const remove = (id: string) => {
+    const next = liveRef.current.filter((item) => item.id !== id);
+    liveRef.current = next;
+    setItems(next);
   };
 
   return (
@@ -238,26 +180,22 @@ export function HeroVideos() {
       {items.map((item) => (
         <div
           key={item.id}
-          className="hero-video-pop absolute overflow-hidden rounded-xl"
-          style={{
-            left: item.x,
-            top: item.y,
-            width: item.width,
-            aspectRatio: "9 / 16",
-            animationDuration: `${GROW_MS}ms`,
-            animationDelay: `${item.animationDelayMs}ms`,
-          }}
-          onAnimationEnd={() => removeItem(item.id)}
+          className="hero-video absolute overflow-hidden rounded-[10px] bg-muted shadow-[0_20px_60px_-20px_rgb(0_0_0/0.8)] ring-1 ring-white/10"
+          style={
+            {
+              left: item.x,
+              top: item.y,
+              width: item.width,
+              aspectRatio: "9 / 16",
+              animationDuration: `${LIFETIME_MS}ms`,
+              animationDelay: `${item.delayMs}ms`,
+              "--from-x": `${item.fromX}px`,
+              "--from-y": `${item.fromY}px`,
+            } as CSSProperties
+          }
+          onAnimationEnd={() => remove(item.id)}
         >
-          <video
-            className="h-full w-full object-cover"
-            src={item.src}
-            muted
-            playsInline
-            autoPlay
-            loop
-            preload="auto"
-          />
+          <video className="h-full w-full object-cover" src={item.src} muted playsInline autoPlay loop preload="auto" />
         </div>
       ))}
     </div>
