@@ -39,11 +39,11 @@ export const NAV_LINKS = [
 ] as const;
 
 export const CLIENTS = [
-  "Holafly",
   "Waynabox",
   "Roamic",
   "Fluido Factory",
   "PowerUp Menu",
+  "and more +"
 ] as const;
 
 /**
