@@ -27,11 +27,11 @@ export function SiteNav() {
       ref={ref}
       data-scrolled="false"
       data-hidden="false"
-      className="group/nav fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4 transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] data-[hidden=true]:-translate-y-[130%] sm:pt-5"
+      className="group/nav fixed inset-x-0 top-0 z-50 flex justify-center pt-4 transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] data-[hidden=true]:-translate-y-[130%] sm:pt-5"
     >
       <nav
         aria-label="Main"
-        className="hero-fade flex w-full max-w-6xl items-center justify-between gap-6 rounded-full border border-transparent py-2 pr-2 pl-5 transition-[max-width,background-color,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] group-data-[scrolled=true]/nav:max-w-3xl group-data-[scrolled=true]/nav:border-line group-data-[scrolled=true]/nav:bg-[#111112]/75 group-data-[scrolled=true]/nav:shadow-[0_10px_40px_-12px_rgb(0_0_0/0.6)] group-data-[scrolled=true]/nav:backdrop-blur-xl"
+        className="hero-fade container-site flex items-center justify-between gap-6 rounded-full border border-transparent py-2 transition-[max-width,padding,background-color,border-color,box-shadow] group-data-[scrolled=true]/nav:pr-2 group-data-[scrolled=true]/nav:pl-5 duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] group-data-[scrolled=true]/nav:max-w-3xl group-data-[scrolled=true]/nav:border-line group-data-[scrolled=true]/nav:bg-[#111112]/75 group-data-[scrolled=true]/nav:shadow-[0_10px_40px_-12px_rgb(0_0_0/0.6)] group-data-[scrolled=true]/nav:backdrop-blur-xl"
       >
         <a href="#top" aria-label="Doquier, back to top" className="shrink-0 rounded-sm">
           {/* eslint-disable-next-line @next/next/no-img-element -- tiny inline brand SVG */}

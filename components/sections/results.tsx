@@ -119,8 +119,8 @@ export function Results() {
   );
 
   return (
-    <section id="results" ref={ref} aria-labelledby="results-heading" className="px-6 py-32 sm:px-10 sm:py-44">
-      <div className="mx-auto max-w-[90rem]">
+    <section id="results" ref={ref} aria-labelledby="results-heading" className="py-32 sm:py-44">
+      <div className="container-site">
         <ScrambleLabel className="mb-6" index="04">
           Results
         </ScrambleLabel>

@@ -4,20 +4,21 @@ import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 
 const HERO_VIDEOS = Array.from({ length: 18 }, (_, i) => `/media/hero/${i + 1}.mp4`);
 
-const RADIAL_COUNT = 18;
 const LIFETIME_MS = 9000;
-const SPAWN_ATTEMPTS = 40;
-const GAP_PX = 22;
-/** Angles start at top (-π/2), spaced evenly. */
-const ANGLE_OFFSET = -Math.PI / 2;
+const SPAWN_ATTEMPTS = 120;
+const GAP_PX = 18;
+/** How far toward the centre each clip starts before flying out (0 = no travel). */
+const FLY_IN = 0.22;
+/** Keeps clips from sliding under the fixed nav. */
+const NAV_CLEARANCE = 88;
 
 /** `behindCopy`: small screens have no free space around the copy, so clips drift behind it instead. */
 type Layout = { spawnMs: number; maxLive: number; seed: number; wMin: number; wMax: number; behindCopy?: boolean };
 
 function layoutFor(width: number): Layout {
-  if (width < 640) return { spawnMs: 1500, maxLive: 6, seed: 4, wMin: 64, wMax: 92, behindCopy: true };
-  if (width < 1024) return { spawnMs: 1400, maxLive: 7, seed: 5, wMin: 70, wMax: 100 };
-  return { spawnMs: 1100, maxLive: 10, seed: 7, wMin: 86, wMax: 132 };
+  if (width < 640) return { spawnMs: 1200, maxLive: 7, seed: 5, wMin: 64, wMax: 92, behindCopy: true };
+  if (width < 1024) return { spawnMs: 900, maxLive: 10, seed: 8, wMin: 70, wMax: 104 };
+  return { spawnMs: 650, maxLive: 16, seed: 13, wMin: 80, wMax: 128 };
 }
 
 type Box = { x: number; y: number; w: number; h: number };
@@ -76,15 +77,11 @@ function tryPlace(
   const usedSrc = new Set(live.map((v) => v.src));
 
   for (let attempt = 0; attempt < SPAWN_ATTEMPTS; attempt++) {
-    const angle = ANGLE_OFFSET + (Math.floor(Math.random() * RADIAL_COUNT) / RADIAL_COUNT) * Math.PI * 2;
     const width = Math.round(rand(layout.wMin, layout.wMax));
     const height = (width * 16) / 9;
-    const dist = rand(Math.min(w, h) * 0.18, Math.hypot(cx, cy));
-    const x = cx + Math.cos(angle) * dist;
-    const y = cy + Math.sin(angle) * dist;
-
-    const inside = x - width / 2 > 8 && x + width / 2 < w - 8 && y - height / 2 > 8 && y + height / 2 < h - 8;
-    if (!inside) continue;
+    // Sample anywhere fully inside the field; exclusions keep the copy clear.
+    const x = rand(width / 2 + 8, w - width / 2 - 8);
+    const y = rand(height / 2 + NAV_CLEARANCE, h - height / 2 - 8);
     const box = { x, y, w: width, h: height };
     if (blocked.some((b) => overlaps(box, b))) continue;
 
@@ -96,8 +93,8 @@ function tryPlace(
       y,
       width,
       // Start pulled toward the headline so each clip appears to fly out of it.
-      fromX: (cx - x) * 0.45,
-      fromY: (cy - y) * 0.45,
+      fromX: (cx - x) * FLY_IN,
+      fromY: (cy - y) * FLY_IN,
       delayMs,
     };
   }

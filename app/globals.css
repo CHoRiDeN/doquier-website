@@ -144,6 +144,15 @@
   }
 }
 
+/* The one content width for the whole site: 1200px, centred, with side gutters. */
+@utility container-site {
+  width: min(100% - 3rem, 1200px);
+  margin-inline: auto;
+  @media (width >= 40rem) {
+    width: min(100% - 5rem, 1200px);
+  }
+}
+
 .font-serif-accent {
   font-family: var(--font-serif);
   font-style: italic;

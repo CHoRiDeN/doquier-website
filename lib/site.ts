@@ -164,11 +164,11 @@ export const USE_CASES = [
     poster: "/media/posters/review-service.jpg",
   },
   {
-    title: "Organic content",
-    description: "Always-on social content that grows the account between campaigns.",
-    src: "/media/reviews/organic.mp4",
-    poster: "/media/posters/review-organic.jpg",
-    client: "Holafly",
+    title: "Brand campaigns",
+    description:
+      "Cinematic brand spots for fashion, beauty and lifestyle, without booking a studio, a crew or a model.",
+    src: "/media/reviews/brand-ad.mp4",
+    poster: "/media/posters/review-brand-ad.jpg",
   },
 ] as const;
 

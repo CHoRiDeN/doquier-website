@@ -11,6 +11,11 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText, ScrambleTextPlugin, DrawS
 
 gsap.defaults({ ease: "expo.out", duration: 1.1 });
 
+// Expose for debugging scroll positions in the browser console during development.
+if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
+  Object.assign(window, { gsap, ScrollTrigger });
+}
+
 /** Shared media queries for gsap.matchMedia(). */
 export const MQ = {
   motion: "(prefers-reduced-motion: no-preference)",

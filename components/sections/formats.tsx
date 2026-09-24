@@ -34,6 +34,8 @@ export function Formats() {
       mm.add(`${MQ.motion} and ${MQ.desktop}`, () => {
         const track = q("[data-track]")[0] as HTMLElement;
         const distance = () => track.scrollWidth - window.innerWidth;
+        // Scroll length per pixel of travel: >1 gives each card more dwell time before the section unpins.
+        const SCROLL_PER_PX = 1.5;
         const cards = q("[data-card]");
 
         const rail = gsap.to(track, {
@@ -42,9 +44,12 @@ export function Formats() {
           scrollTrigger: {
             trigger: ref.current,
             pin: true,
+            pinSpacing: true,
             start: "top top",
-            end: () => `+=${distance()}`,
-            scrub: 0.8,
+            end: () => `+=${distance() * SCROLL_PER_PX}`,
+            // No scrub lag: the rail must finish exactly as the section unpins (Lenis already smooths input).
+            scrub: true,
+            anticipatePin: 1,
             invalidateOnRefresh: true,
             onUpdate(self) {
               gsap.set(q("[data-progress]"), { scaleX: self.progress });
@@ -81,8 +86,8 @@ export function Formats() {
       aria-labelledby="formats-heading"
       className="relative flex flex-col justify-center overflow-hidden py-24 lg:h-svh lg:py-0"
     >
-      <div className="mx-auto mb-12 flex w-full max-w-[90rem] flex-col gap-8 px-6 sm:px-10 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
-        <div className="max-w-xl">
+      <div className="container-site mb-12 flex flex-col gap-8 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
+        <div className="">
           <ScrambleLabel className="mb-6" index="02">
             Formats
           </ScrambleLabel>
@@ -92,10 +97,7 @@ export function Formats() {
           >
             Every format. <span className="font-serif-accent text-accent-warm">One studio.</span>
           </SplitReveal>
-          <p className="mt-5 max-w-md text-pretty text-foreground/60">
-            From talking heads to street interviews, every format your media buyers want to test, produced to feel native
-            on TikTok, Reels and Shorts.
-          </p>
+       
         </div>
 
         <div aria-hidden className="hidden w-64 items-center gap-4 font-mono text-xs text-muted-foreground lg:flex">
@@ -112,7 +114,7 @@ export function Formats() {
       <div className="overflow-x-auto overscroll-x-contain [scrollbar-width:none] lg:overflow-visible [&::-webkit-scrollbar]:hidden">
         <ul
           data-track
-          className="flex w-max snap-x snap-mandatory gap-4 px-6 sm:gap-6 sm:px-10 lg:snap-none lg:gap-8 lg:pr-[12vw] lg:pl-[max(2.5rem,calc((100vw-90rem)/2+2.5rem))]"
+          className="flex w-max snap-x snap-mandatory gap-4 px-6 sm:gap-6 sm:px-10 lg:snap-none lg:gap-8 lg:px-[max(2.5rem,calc((100%-1200px)/2))]"
         >
           {FORMATS.map((format, i) => (
             <li key={format.name} data-card className="w-[68vw] shrink-0 snap-start sm:w-[42vw] lg:w-auto">

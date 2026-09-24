@@ -30,14 +30,14 @@ export function Manifesto() {
   );
 
   return (
-    <section ref={ref} aria-label="Why Doquier" className="px-6 py-32 sm:py-44">
-      <div className="mx-auto max-w-5xl">
+    <section ref={ref} aria-label="Why Doquier" className="py-32 sm:py-44">
+      <div className="container-site">
         <ScrambleLabel className="mb-10" index="01">
           The problem
         </ScrambleLabel>
         <p
           data-fill
-          className="text-[clamp(1.75rem,4.2vw,3.5rem)] leading-[1.12] font-medium tracking-[-0.035em] text-balance"
+          className="max-w-5xl text-[clamp(1.75rem,4.2vw,3.5rem)] leading-[1.12] font-medium tracking-[-0.035em] text-balance"
         >
           Creators take weeks. Your ads burn out in days. Performance teams need fresh, human-looking creative every week,
           not every quarter. <span className="font-serif-accent text-accent-warm">Doquier</span> closes that gap: native

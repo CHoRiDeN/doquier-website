@@ -55,7 +55,7 @@ export function Hero() {
 
           <h1
             id="hero-heading"
-            className="font-heading text-[clamp(2.75rem,8vw,6.25rem)] leading-[0.95] font-semibold tracking-[-0.045em] text-balance"
+            className="font-heading text-[clamp(2.5rem,6.5vw,5rem)] leading-[0.95] font-semibold tracking-[-0.045em] text-balance"
           >
             <span className="hero-line">
               <span style={delay(0.2)}>
@@ -72,7 +72,7 @@ export function Hero() {
             style={delay(0.5)}
           >
             Doquier scripts, produces and delivers creator-style video ads with AI. Every format your media buyers need, in
-            every European language, at up to 80% less than traditional UGC.
+            every language.
           </p>
 
           <div className="hero-fade mt-10 flex flex-wrap items-center justify-center gap-3" style={delay(0.65)}>
@@ -88,14 +88,13 @@ export function Hero() {
 
       <div
         data-hero-clients
-        data-hero-exclude
-        className="hero-fade mx-auto mb-8 flex w-full max-w-5xl flex-col items-center gap-4 px-6 sm:mb-10"
+        className="hero-fade container-site mb-8 flex flex-col items-center gap-4 sm:mb-10"
         style={delay(0.9)}
       >
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+        <p data-hero-exclude className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
           Trusted by growth teams at
         </p>
-        <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 sm:gap-x-12">
+        <ul data-hero-exclude className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 sm:gap-x-12">
           {CLIENTS.map((client) => (
             <li
               key={client}

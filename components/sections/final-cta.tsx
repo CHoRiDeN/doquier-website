@@ -36,7 +36,7 @@ export function FinalCta() {
       <section
         id="start"
         aria-labelledby="start-heading"
-        className="relative isolate mx-3 overflow-hidden rounded-[2rem] px-6 py-36 text-center sm:mx-5 sm:py-48"
+        className="container-site relative isolate overflow-hidden rounded-[2rem] px-6 py-36 text-center sm:py-48"
       >
         <MeshGradient className="absolute inset-0 -z-10 h-full w-full" />
         <div className="mx-auto flex max-w-4xl flex-col items-center">
@@ -59,8 +59,8 @@ export function FinalCta() {
         </div>
       </section>
 
-      <footer className="overflow-hidden px-6 pt-20 sm:px-10">
-        <div className="mx-auto flex max-w-[90rem] flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
+      <footer className="overflow-hidden pt-20">
+        <div className="container-site flex flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
           <p className="max-w-xs text-sm leading-relaxed text-foreground/50">
             AI-generated UGC for European performance brands. Scripted by strategists, made to feel real.
           </p>
@@ -82,12 +82,12 @@ export function FinalCta() {
           </nav>
         </div>
 
-        <div className="mx-auto mt-20 max-w-[90rem] overflow-hidden">
+        <div className="container-site mt-20 overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element -- decorative brand SVG */}
           <img data-wordmark src="/brand/doquier-logo.svg" alt="" width={285} height={67} className="w-full opacity-[0.06]" />
         </div>
 
-        <div className="mx-auto flex max-w-[90rem] flex-col gap-2 border-t border-line py-8 font-mono text-[11px] tracking-[0.12em] text-muted-foreground uppercase sm:flex-row sm:justify-between">
+        <div className="container-site flex flex-col gap-2 border-t border-line py-8 font-mono text-[11px] tracking-[0.12em] text-muted-foreground uppercase sm:flex-row sm:justify-between">
           <span>© {new Date().getFullYear()} Doquier</span>
           <span>Made in Europe</span>
         </div>

@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { LazyVideo } from "@/components/motion/lazy-video";
+import { SoundVideo } from "@/components/motion/sound-video";
 import { ScrambleLabel } from "@/components/motion/scramble-label";
 import { SplitReveal } from "@/components/motion/split-reveal";
 import { gsap, MQ, ScrollTrigger, useGSAP } from "@/lib/gsap";
@@ -85,7 +86,7 @@ export function Compare() {
 
   return (
     <section ref={ref} aria-labelledby="compare-heading" className="overflow-hidden py-32 sm:py-44">
-      <div className="mx-auto max-w-[90rem] px-6 sm:px-10">
+      <div className="container-site">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <ScrambleLabel className="mb-6" index="05">
@@ -105,21 +106,22 @@ export function Compare() {
         </div>
       </div>
 
-      <div className="mt-16 flex items-center gap-6 pl-6 sm:gap-10 sm:pl-10 lg:pl-[max(2.5rem,calc((100vw-90rem)/2+2.5rem))]">
+      <div className="container-site mt-16 flex items-center gap-6 sm:gap-10">
         <figure className="relative z-10 w-[44vw] max-w-[300px] shrink-0 sm:w-[260px]">
           <div
             data-doquier-card
             className="relative aspect-[9/16] overflow-hidden rounded-3xl bg-muted shadow-[0_40px_120px_-30px_rgb(195_184_168/0.35)] ring-1 ring-accent-warm/60"
           >
-            <LazyVideo
-              src="/media/formats/talking-head-2.mp4"
-              poster="/media/posters/talking-head-2.jpg"
-              className="h-full w-full object-cover"
+            <SoundVideo
+              src="/media/competitors/doquier-holafly.mp4"
+              poster="/media/posters/competitor-doquier-holafly.jpg"
+              label="Doquier ad for Holafly"
             />
           </div>
           <figcaption className="mt-4 flex items-center gap-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element -- tiny inline brand SVG */}
             <img src="/brand/doquier-logo.svg" alt="Doquier" width={96} height={22} className="h-5 w-auto" />
+
           </figcaption>
         </figure>
 
@@ -145,7 +147,7 @@ export function Compare() {
         </div>
       </div>
 
-      <div className="mx-auto mt-32 max-w-[90rem] px-6 sm:px-10">
+      <div className="container-site mt-32">
         <h3 className="mb-10 max-w-xl text-[clamp(1.5rem,2.6vw,2.25rem)] leading-tight font-semibold tracking-[-0.035em] text-balance">
           The speed of software. The feel of a real creator.
         </h3>
@@ -166,9 +168,7 @@ export function Compare() {
                 </th>
                 <th scope="col" className="px-6 pb-5 font-medium text-foreground/70">
                   Self-serve AI tools
-                  <span className="mt-1 block text-xs font-normal text-muted-foreground">
-                    {COMPETITORS.map((c) => c.name).join(", ")}
-                  </span>
+               
                 </th>
               </tr>
             </thead>

@@ -12,8 +12,8 @@ export function Faq() {
   const baseId = useId();
 
   return (
-    <section id="faq" aria-labelledby="faq-heading" className="px-6 py-32 sm:px-10 sm:py-44">
-      <div className="mx-auto grid max-w-[90rem] gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-24">
+    <section id="faq" aria-labelledby="faq-heading" className="py-32 sm:py-44">
+      <div className="container-site grid gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-24">
         <div>
           <ScrambleLabel className="mb-6" index="07">
             FAQ

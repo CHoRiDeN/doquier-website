@@ -65,8 +65,8 @@ export function UseCases() {
   );
 
   return (
-    <section ref={ref} aria-labelledby="cases-heading" className="px-6 py-32 sm:px-10 sm:py-44">
-      <div className="mx-auto max-w-[90rem]">
+    <section ref={ref} aria-labelledby="cases-heading" className="py-32 sm:py-44">
+      <div className="container-site">
         <ScrambleLabel className="mb-6" index="06">
           Use cases
         </ScrambleLabel>
@@ -83,18 +83,11 @@ export function UseCases() {
             <li key={item.title} className="transition-opacity duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]">
               <div
                 data-case-media
-                className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-muted ring-1 ring-line"
+                className="relative aspect-[9/16] overflow-hidden rounded-3xl bg-muted ring-1 ring-line"
               >
                 <PlayableVideo src={item.src} poster={item.poster} title={item.title} />
               </div>
-              <div className="mt-6 flex items-baseline justify-between gap-4">
-                <h3 className="text-2xl font-semibold tracking-[-0.035em]">{item.title}</h3>
-                {"client" in item ? (
-                  <span className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
-                    for {item.client}
-                  </span>
-                ) : null}
-              </div>
+              <h3 className="mt-6 text-2xl font-semibold tracking-[-0.035em]">{item.title}</h3>
               <p className="mt-2 max-w-[38ch] leading-relaxed text-pretty text-foreground/55">{item.description}</p>
             </li>
           ))}

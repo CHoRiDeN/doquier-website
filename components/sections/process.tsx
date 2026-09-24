@@ -52,8 +52,8 @@ export function Process() {
   );
 
   return (
-    <section id="process" ref={ref} aria-labelledby="process-heading" className="px-6 py-32 sm:px-10 sm:py-44">
-      <div className="mx-auto grid max-w-[90rem] gap-16 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
+    <section id="process" ref={ref} aria-labelledby="process-heading" className="py-32 sm:py-44">
+      <div className="container-site grid gap-16 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <ScrambleLabel className="mb-6" index="03">
             How it works

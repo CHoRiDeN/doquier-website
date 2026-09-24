@@ -19,7 +19,7 @@ export default function Home() {
         Skip to content
       </a>
       <SiteNav />
-      <main id="main" className="flex flex-1 flex-col">
+      <main id="main" className="flex-1">
         <Hero />
         <Manifesto />
         <Formats />
