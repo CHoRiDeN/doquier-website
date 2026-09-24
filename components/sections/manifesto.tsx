@@ -12,7 +12,7 @@ export function Manifesto() {
     () => {
       const mm = gsap.matchMedia();
       mm.add(MQ.motion, () => {
-        const split = SplitText.create("[data-fill]", { type: "words" });
+        const split = SplitText.create("[data-fill]", { type: "words", aria: "none" });
         gsap.fromTo(
           split.words,
           { opacity: 0.14 },

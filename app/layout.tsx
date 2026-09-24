@@ -4,15 +4,17 @@ import "lenis/dist/lenis.css";
 import "./globals.css";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
 import { SITE, SITE_URL } from "@/lib/site";
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const schibstedGrotesk = Schibsted_Grotesk({
   variable: "--font-sans",
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
 });
 
 const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument-serif",
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   weight: "400",
   style: "italic",
 });
@@ -20,6 +22,7 @@ const instrumentSerif = Instrument_Serif({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -79,6 +82,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col">
         <SmoothScroll />
+        <Analytics/> 
+        <SpeedInsights/>
         {children}
         <div aria-hidden className="grain" />
       </body>

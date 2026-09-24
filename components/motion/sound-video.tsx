@@ -36,6 +36,7 @@ export function SoundVideo({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
+          if (poster && !video.poster) video.poster = poster;
           if (!video.src) video.src = src;
           if (modeRef.current === "preview" && !reduced) video.play().catch(() => {});
         } else if (!video.paused) {
@@ -43,11 +44,11 @@ export function SoundVideo({
           if (modeRef.current === "playing") setMode("paused");
         }
       },
-      { rootMargin: "200px" },
+      { rootMargin: "300px" },
     );
     observer.observe(video);
     return () => observer.disconnect();
-  }, [src]);
+  }, [src, poster]);
 
   const toggle = () => {
     const video = ref.current;
@@ -86,7 +87,6 @@ export function SoundVideo({
       <video
         ref={ref}
         className="h-full w-full object-cover"
-        poster={poster}
         muted
         loop
         playsInline
@@ -97,7 +97,6 @@ export function SoundVideo({
         type="button"
         onClick={toggle}
         aria-pressed={playing}
-        aria-label={playing ? `Pause ${label}` : `Play ${label} with sound`}
         className="absolute inset-0 flex cursor-pointer items-end justify-start bg-gradient-to-t from-black/55 via-transparent to-transparent p-4 transition-opacity duration-500 focus-visible:outline-offset-[-3px]"
       >
         <span
@@ -118,6 +117,7 @@ export function SoundVideo({
             )}
           </span>
           {mode === "preview" ? "Play with sound" : playing ? "Pause" : "Resume"}
+          <span className="sr-only">: {label}</span>
         </span>
       </button>
     </div>

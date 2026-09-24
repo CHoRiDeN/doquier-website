@@ -47,7 +47,7 @@ export function Hero() {
         <div data-hero-exclude className="flex max-w-3xl flex-col items-center">
           <p
             className="hero-fade mb-7 inline-flex items-center gap-2.5 rounded-full border border-line bg-background/40 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/70 backdrop-blur-md"
-            style={delay(0.1)}
+            style={delay(0)}
           >
             <span aria-hidden className="size-1.5 animate-pulse rounded-full bg-accent-warm" />
             AI UGC studio for performance brands
@@ -58,24 +58,24 @@ export function Hero() {
             className="font-heading text-[clamp(2.5rem,6.5vw,5rem)] leading-[0.95] font-semibold tracking-[-0.045em] text-balance"
           >
             <span className="hero-line">
-              <span style={delay(0.2)}>
+              <span style={delay(0.06)}>
                 UGC that looks <span className="font-serif-accent pr-[0.04em] text-accent-warm">real.</span>
               </span>
             </span>
             <span className="hero-line">
-              <span style={delay(0.3)}>Made on autopilot.</span>
+              <span style={delay(0.14)}>Made on autopilot.</span>
             </span>
           </h1>
 
           <p
             className="hero-fade mt-7 max-w-xl text-[clamp(1rem,1.4vw,1.125rem)] leading-relaxed text-pretty text-foreground/65"
-            style={delay(0.5)}
+            style={delay(0.3)}
           >
             Doquier scripts, produces and delivers creator-style video ads with AI. Every format your media buyers need, in
             every language.
           </p>
 
-          <div className="hero-fade mt-10 flex flex-wrap items-center justify-center gap-3" style={delay(0.65)}>
+          <div className="hero-fade mt-10 flex flex-wrap items-center justify-center gap-3" style={delay(0.42)}>
             <CtaLink href={FORM_URL} size="lg">
               Start your project
             </CtaLink>
@@ -89,7 +89,7 @@ export function Hero() {
       <div
         data-hero-clients
         className="hero-fade container-site mb-8 flex flex-col items-center gap-4 sm:mb-10"
-        style={delay(0.9)}
+        style={delay(0.6)}
       >
         <p data-hero-exclude className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
           Trusted by growth teams at

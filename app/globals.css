@@ -194,8 +194,7 @@
 @keyframes hero-fade {
   from {
     opacity: 0;
-    transform: translateY(14px);
-    filter: blur(6px);
+    transform: translateY(12px);
   }
 }
 

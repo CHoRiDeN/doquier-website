@@ -130,19 +130,29 @@ export function HeroVideos() {
       if (next) commit([...liveRef.current, next]);
     };
 
-    // Seed a few mid-animation so the hero never starts empty.
-    const seeded: SpawnedVideo[] = [];
-    for (let i = 0; i < layout.seed; i++) {
-      const placed = tryPlace(root, layout, seeded, makeId, -Math.round(rand(0.2, 0.7) * LIFETIME_MS));
-      if (placed) seeded.push(placed);
-    }
-    commit(seeded);
-
     const start = () => {
       window.clearInterval(timer);
       timer = window.setInterval(spawn, layout.spawnMs);
     };
-    start();
+
+    // Clips are decorative: wait until the page has loaded and the main thread is idle,
+    // so they never compete with the headline for bandwidth or paint.
+    let cancelled = false;
+    const begin = () => {
+      if (cancelled) return;
+      // Seed a few mid-animation so the hero fills in at once rather than one by one.
+      const seeded: SpawnedVideo[] = [];
+      for (let i = 0; i < layout.seed; i++) {
+        const placed = tryPlace(root, layout, seeded, makeId, -Math.round(rand(0.2, 0.7) * LIFETIME_MS));
+        if (placed) seeded.push(placed);
+      }
+      commit(seeded);
+      start();
+    };
+    const whenIdle = () =>
+      "requestIdleCallback" in window ? window.requestIdleCallback(begin, { timeout: 1500 }) : setTimeout(begin, 200);
+    if (document.readyState === "complete") whenIdle();
+    else window.addEventListener("load", whenIdle, { once: true });
 
     const io = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
@@ -160,6 +170,8 @@ export function HeroVideos() {
     window.addEventListener("resize", onResize);
 
     return () => {
+      cancelled = true;
+      window.removeEventListener("load", whenIdle);
       window.clearInterval(timer);
       io.disconnect();
       window.removeEventListener("resize", onResize);

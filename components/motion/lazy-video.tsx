@@ -3,15 +3,16 @@
 import { useEffect, useRef, type ComponentProps } from "react";
 
 /**
- * Muted looping video that only downloads and plays while on screen.
- * Keeps the number of decoding videos small no matter how many are on the page.
+ * Muted looping video whose poster and source only download once it nears the viewport,
+ * and which only plays while on screen. Keeps initial page weight and decoder count low.
  */
 export function LazyVideo({
   src,
+  poster,
   className,
-  rootMargin = "200px",
+  rootMargin = "300px",
   ...props
-}: ComponentProps<"video"> & { src: string; rootMargin?: string }) {
+}: Omit<ComponentProps<"video">, "poster"> & { src: string; poster?: string; rootMargin?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -22,6 +23,7 @@ export function LazyVideo({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
+          if (poster && !video.poster) video.poster = poster;
           if (!video.src) video.src = src;
           if (!reduced) video.play().catch(() => {});
         } else if (!video.paused) {
@@ -32,7 +34,7 @@ export function LazyVideo({
     );
     observer.observe(video);
     return () => observer.disconnect();
-  }, [src, rootMargin]);
+  }, [src, poster, rootMargin]);
 
   return (
     <video

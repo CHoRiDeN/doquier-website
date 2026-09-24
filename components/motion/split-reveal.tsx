@@ -34,6 +34,9 @@ export function SplitReveal({
         const split = SplitText.create(ref.current, {
           type: by === "chars" ? "lines,words,chars" : "lines",
           mask: "lines",
+          // Splitting lines keeps words intact, so the text stays readable as-is. Char splits need a label,
+          // which is only valid on headings.
+          aria: by === "chars" ? "auto" : "none",
           autoSplit: true,
           onSplit(self) {
             const targets = by === "chars" ? self.chars : self.lines;
