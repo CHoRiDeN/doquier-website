@@ -1,4 +1,6 @@
 import { Compare } from "@/components/sections/compare";
+import { Distribution } from "@/components/sections/distribution";
+import { Engagements } from "@/components/sections/engagements";
 import { Faq } from "@/components/sections/faq";
 import { FinalCta } from "@/components/sections/final-cta";
 import { Formats } from "@/components/sections/formats";
@@ -7,6 +9,7 @@ import { Languages } from "@/components/sections/languages";
 import { Manifesto } from "@/components/sections/manifesto";
 import { Process } from "@/components/sections/process";
 import { Results } from "@/components/sections/results";
+import { Services } from "@/components/sections/services";
 import { SiteNav } from "@/components/sections/site-nav";
 import { UseCases } from "@/components/sections/use-cases";
 import { StructuredData } from "@/components/structured-data";
@@ -26,12 +29,15 @@ export default function Home() {
       <main id="main" className="flex-1">
         <Hero />
         <Manifesto />
+        <Services />
+        <Process />
+        <UseCases />
         <Formats />
         <Languages />
-        <Process />
+        <Distribution />
         <Results />
         <Compare />
-        <UseCases />
+        <Engagements />
         <Faq />
         <FinalCta />
       </main>

@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { CtaLink } from "@/components/motion/cta-link";
 import { LazyVideo } from "@/components/motion/lazy-video";
 import { SoundVideo } from "@/components/motion/sound-video";
-import { ScrambleLabel } from "@/components/motion/scramble-label";
 import { SplitReveal } from "@/components/motion/split-reveal";
 import { gsap, MQ, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { COMPARISON, COMPETITORS, FORM_URL } from "@/lib/site";
@@ -148,11 +147,11 @@ export function Compare() {
 
       <div className="container-site mt-32">
         <h3 className="mb-10 max-w-xl text-[clamp(1.5rem,2.6vw,2.25rem)] leading-tight font-semibold tracking-[-0.035em] text-balance">
-          The speed of software. The feel of a real creator.
+          The output of an agency. <span className="font-serif-accent text-accent-warm">The speed of software.</span>
         </h3>
         <div className="-mx-6 overflow-x-auto px-6 sm:mx-0 sm:px-0">
           <table className="w-full min-w-[720px] border-collapse text-left text-sm">
-            <caption className="sr-only">Doquier compared with creator-made UGC and self-serve AI tools</caption>
+            <caption className="sr-only">Doquier compared with self-serve AI tools and creators or agencies</caption>
             <thead>
               <tr className="align-bottom">
                 <th scope="col" className="w-[28%] pb-5 font-normal text-muted-foreground" />
@@ -163,11 +162,10 @@ export function Compare() {
                   Doquier
                 </th>
                 <th scope="col" className="px-6 pb-5 font-medium text-foreground/70">
-                  Creator UGC
+                  Self-serve AI tools
                 </th>
                 <th scope="col" className="px-6 pb-5 font-medium text-foreground/70">
-                  Self-serve AI tools
-               
+                  Creators &amp; agencies
                 </th>
               </tr>
             </thead>
@@ -186,10 +184,10 @@ export function Compare() {
                     <Cell value={row.doquier} highlight />
                   </td>
                   <td className="px-6 py-5 text-foreground/60">
-                    <Cell value={row.creators} />
+                    <Cell value={row.tools} />
                   </td>
                   <td className="px-6 py-5 text-foreground/60">
-                    <Cell value={row.tools} />
+                    <Cell value={row.creators} />
                   </td>
                 </tr>
               ))}
@@ -197,7 +195,7 @@ export function Compare() {
           </table>
         </div>
         <CtaLink href={FORM_URL} className="mt-12">
-          Get ads that look real
+          Book a strategy call
         </CtaLink>
       </div>
     </section>

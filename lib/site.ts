@@ -1,10 +1,40 @@
 /**
  * Single source of truth for landing-page content.
- * Every CTA links to FORM_URL; the waitlist modal intercepts these links (and a direct /#waitlist visit).
+ * Every CTA links to FORM_URL; the strategy-call modal intercepts these links (and a direct /#book-a-call visit).
  */
-export const FORM_URL = "#waitlist";
+export const FORM_URL = "#book-a-call";
 
-/** Waitlist form options. Values are stored in Brevo exactly as written here. */
+/** Strategy-call form options. Values are stored in Brevo exactly as written here. */
+export const GOALS = [
+  "Brand awareness",
+  "Sales & conversions",
+  "Reviews & reputation",
+  "App installs",
+  "Launch in a new market",
+  "Something else",
+] as const;
+export const MARKETS = [
+  "Spain",
+  "Germany",
+  "France",
+  "Italy",
+  "United Kingdom",
+  "Netherlands",
+  "Portugal",
+  "Poland",
+  "Other",
+] as const;
+export const SERVICE_OPTIONS = ["Content strategy", "Video production", "Distribution"] as const;
+export const INDUSTRIES = [
+  "E-commerce & retail",
+  "Fashion & beauty",
+  "Real estate",
+  "Apps & software",
+  "Travel & hospitality",
+  "Health & wellness",
+  "Professional services",
+  "Other",
+] as const;
 export const COMPANY_SIZES = ["1–10", "11–50", "51–200", "201–500", "500+"] as const;
 export const MONTHLY_AD_SPEND = [
   "Under €10k",
@@ -19,15 +49,21 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.doquie
 
 export const SITE = {
   name: "Doquier",
-  title: "Doquier — UGC ads that look real, made with AI",
-  tagline: "UGC that looks real. Made on autopilot.",
+  title: "Doquier — AI UGC content, planned, produced and published for you",
+  tagline: "UGC that looks real. Planned, made and posted.",
   description:
-    "Doquier is an AI UGC studio for European performance brands. We script, produce and deliver creator-style video ads in every format and European language, at up to 80% less than traditional UGC.",
-  shortDescription: "AI-made UGC video ads for European performance brands, delivered in 72 hours.",
+    "Doquier is a done-for-you AI content studio for European brands. We turn a business goal into a content plan, produce hundreds of realistic UGC videos in every format and language, and publish them in your target markets.",
+  shortDescription: "Done-for-you AI UGC: content strategy, bulk video production and social distribution for European brands.",
   locale: "en_GB",
   keywords: [
     "AI UGC",
+    "AI UGC agency",
+    "AI content studio",
     "UGC ads",
+    "social media distribution",
+    "content strategy",
+    "Shopify product videos",
+    "real estate property videos",
     "AI video ads",
     "user-generated content",
     "creator ads",
@@ -42,10 +78,45 @@ export const SITE = {
 } as const;
 
 export const NAV_LINKS = [
-  { label: "Formats", href: "#formats" },
-  { label: "Process", href: "#process" },
-  { label: "Results", href: "#results" },
+  { label: "Services", href: "#services" },
+  { label: "How it works", href: "#process" },
+  { label: "Use cases", href: "#use-cases" },
   { label: "FAQ", href: "#faq" },
+] as const;
+
+/** Rotating word in the hero subline: what the content is for. */
+export const HERO_USE_CASES = [
+  "product reviews",
+  "Shopify product pages",
+  "property tours",
+  "app launches",
+  "paid social ads",
+  "brand campaigns",
+] as const;
+
+/** The three services, in the order a client moves through them. */
+export const SERVICES = [
+  {
+    step: "Plan",
+    title: "Content strategy",
+    description:
+      "We start from your goal (awareness in a new country, more reviews, more installs) and turn it into a plan: angles, hooks, formats, volume and a publishing calendar.",
+    deliverable: "Content plan & calendar",
+  },
+  {
+    step: "Produce",
+    title: "AI UGC production",
+    description:
+      "Our studio produces the plan in bulk: hundreds of on-brand videos across formats and languages, checked by people before they ever reach you.",
+    deliverable: "Ready-to-post videos, every week",
+  },
+  {
+    step: "Distribute",
+    title: "Social distribution",
+    description:
+      "We publish natively in each target market on a steady cadence, scale reach as far as the plan needs and report on what's working.",
+    deliverable: "Publishing, reach & reporting",
+  },
 ] as const;
 
 export const CLIENTS = [
@@ -181,24 +252,59 @@ export const FORMATS: Format[] = [
 
 export const PROCESS = [
   {
-    title: "Brief",
-    description:
-      "Tell us about your product, audience and offer in a ten-minute form. No kick-off calls required.",
+    title: "Strategy call",
+    description: "Thirty minutes to understand your brand, audience, markets and the goal you want to hit.",
   },
   {
-    title: "Strategy & scripts",
+    title: "Content plan",
     description:
-      "Performance strategists write hooks and angles based on what's winning in your category right now.",
+      "A plan built around that goal: how many pieces, which formats, which languages and when each one goes live.",
   },
   {
-    title: "Casting & production",
-    description:
-      "We cast AI creators who look like your buyers, then produce every format and variation.",
+    title: "Production",
+    description: "We produce the plan in bulk. You review and approve each batch; we handle every revision.",
   },
   {
-    title: "Launch & iterate",
+    title: "Distribution",
     description:
-      "Ad-ready files in 9:16, 4:5 and 1:1. We read the results and double down on the winners.",
+      "We publish in each target market on a steady cadence, or hand your team ready-to-post files. Your call.",
+  },
+  {
+    title: "Report & iterate",
+    description: "We track what performs and feed it into the next batch, so every round beats the last.",
+  },
+] as const;
+
+export const DISTRIBUTION_POINTS = [
+  {
+    title: "In-market publishing",
+    description: "Posts go out from the country you're targeting, in its language, to the people you want to reach.",
+  },
+  {
+    title: "Reach that scales",
+    description: "Add accounts and markets as results come in. There's no cap on how far a plan can go.",
+  },
+] as const;
+
+/** Ways to work with Doquier. No prices: each engagement is scoped on the strategy call. */
+export const ENGAGEMENTS = [
+  {
+    name: "Production",
+    description: "You have the strategy and the channels. We produce the videos, in bulk and on schedule.",
+    includes: ["Scripts & hooks", "Every format & language", "Weekly batches"],
+    featured: false,
+  },
+  {
+    name: "Production + distribution",
+    description: "We produce the videos and publish them in your target markets, then report on what's working.",
+    includes: ["Everything in Production", "In-market publishing", "Monthly reporting"],
+    featured: false,
+  },
+  {
+    name: "Full programme",
+    description: "Goal in, results out. Strategy, production, distribution and optimisation, run as one team.",
+    includes: ["Content strategy & calendar", "Production & distribution", "Ongoing optimisation"],
+    featured: true,
   },
 ] as const;
 
@@ -214,20 +320,21 @@ export const COMPETITORS = [
 
 type Cell = string | boolean;
 
-export const COMPARISON: { label: string; doquier: Cell; creators: Cell; tools: Cell }[] = [
-  { label: "Looks native to the feed", doquier: true, creators: true, tools: "Depends on your prompts" },
-  { label: "Brief to first ads", doquier: "72 hours", creators: "2–4 weeks", tools: "Whenever your team finds time" },
-  { label: "Cost per video", doquier: "Up to 80% less", creators: "€150–500+", tools: "Subscription + your team's hours" },
-  { label: "Strategy & scripting", doquier: "Included", creators: "Extra", tools: "You write it" },
-  { label: "Variations for testing", doquier: "30+ per brief", creators: "1–3 per creator", tools: "Manual" },
-  { label: "Usage rights", doquier: "Perpetual, every channel", creators: "Negotiated, time-limited", tools: "Varies by plan" },
-  { label: "Done for you", doquier: true, creators: false, tools: false },
+export const COMPARISON: { label: string; doquier: Cell; tools: Cell; creators: Cell }[] = [
+  { label: "Looks native to the feed", doquier: true, tools: "Depends on your prompts", creators: true },
+  { label: "Strategy & content plan", doquier: "Included", tools: "You write it", creators: "Extra cost" },
+  { label: "Tool to learn", doquier: "None, it's done for you", tools: "Weeks to master", creators: "None" },
+  { label: "Monthly volume", doquier: "Hundreds of videos", tools: "Limited by your team's hours", creators: "A handful" },
+  { label: "Languages & markets", doquier: "8+ languages, cast locally", tools: "One at a time, by hand", creators: "One creator per market" },
+  { label: "Distribution", doquier: "Included, optional", tools: false, creators: "Rarely" },
+  { label: "Cost per video", doquier: "Up to 80% less", tools: "Subscription + your team's hours", creators: "€150–500+" },
+  { label: "Usage rights", doquier: "Perpetual, every channel", tools: "Varies by plan", creators: "Negotiated, time-limited" },
 ];
 
 export const USE_CASES = [
   {
     title: "Product reviews",
-    description: "Your product in real hands, in real kitchens and bathrooms. The review that closes the sale.",
+    description: "Your product in real hands, in real homes. Reviews for product pages, marketplaces and paid social.",
     src: "/media/reviews/product.mp4",
     poster: "/media/posters/review-product.jpg",
   },
@@ -238,18 +345,39 @@ export const USE_CASES = [
     poster: "/media/posters/review-service.jpg",
   },
   {
-    title: "Brand campaigns",
+    title: "Fashion & product pages",
     description:
-      "Cinematic brand spots for fashion, beauty and lifestyle, without booking a studio, a crew or a model.",
+      "Try-ons and product details that turn a Shopify page into a showroom, without a studio, a crew or a model.",
     src: "/media/reviews/brand-ad.mp4",
     poster: "/media/posters/review-brand-ad.jpg",
   },
 ] as const;
 
+/** Further sectors we serve, listed under the use-case cards until they have their own examples. */
+export const MORE_USE_CASES = [
+  "Real estate property tours",
+  "App launches",
+  "Paid social ads",
+  "Hospitality & travel",
+  "Clinics & wellness",
+] as const;
+
 export const FAQ = [
   {
+    q: "Do we need to learn a tool?",
+    a: "No. There's no software to learn and no prompts to write. You talk to our team, approve the plan and review the videos. We do the rest.",
+  },
+  {
     q: "Will people know it's AI?",
-    a: "Our videos are built to feel native to the feed: natural delivery, real-world settings and imperfect, human pacing. Where Meta, TikTok or EU rules require AI disclosure, we deliver files with the right labels so you stay compliant without losing performance.",
+    a: "Our videos are built to feel native to the feed: natural delivery, real-world settings and imperfect, human pacing. Where Meta, TikTok or EU rules require AI disclosure, we deliver and publish with the right labels so you stay compliant.",
+  },
+  {
+    q: "How many videos can you produce?",
+    a: "From a few dozen to several hundred a month. Volume is set in your content plan and can scale up or down as results come in.",
+  },
+  {
+    q: "Can you publish the content for us?",
+    a: "Yes. Distribution is optional: we can publish natively in each target market on a steady cadence and report on performance, or deliver ready-to-post files for your team.",
   },
   {
     q: "Who owns the content?",
@@ -260,15 +388,11 @@ export const FAQ = [
     a: "All major European languages, including English, Spanish, French, German, Italian, Portuguese, Dutch and Polish, with creators cast to look and sound local. Most other languages are available on request.",
   },
   {
-    q: "What do you need from us?",
-    a: "A short brief, your brand assets and product visuals. For physical products, a few photos or a sample helps us get the details exactly right.",
-  },
-  {
     q: "How fast can we launch?",
-    a: "Your first batch lands within 72 hours of an approved brief. After that, we ship new variations every week based on what's performing.",
+    a: "Most brands have a content plan within a week of the strategy call, and the first batch of videos shortly after.",
   },
   {
     q: "How is pricing structured?",
-    a: "Plans are tailored to your monthly creative volume. Tell us about your goals and we'll send a proposal within one business day.",
+    a: "Every engagement is scoped on the strategy call around your goal, volume and the services you need. You get a proposal within one business day.",
   },
 ] as const;

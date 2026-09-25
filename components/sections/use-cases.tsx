@@ -2,10 +2,9 @@
 
 import { useRef, useState } from "react";
 import { CtaLink } from "@/components/motion/cta-link";
-import { ScrambleLabel } from "@/components/motion/scramble-label";
 import { SplitReveal } from "@/components/motion/split-reveal";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
-import { FORM_URL, USE_CASES } from "@/lib/site";
+import { FORM_URL, MORE_USE_CASES, USE_CASES } from "@/lib/site";
 
 /** Poster until clicked, then plays the full clip with sound and native controls. */
 function PlayableVideo({ src, poster, title }: { src: string; poster: string; title: string }) {
@@ -66,15 +65,19 @@ export function UseCases() {
   );
 
   return (
-    <section ref={ref} aria-labelledby="cases-heading" className="py-32 sm:py-44">
+    <section id="use-cases" ref={ref} aria-labelledby="cases-heading" className="py-32 sm:py-44">
       <div className="container-site">
       
         <SplitReveal
           id="cases-heading"
           className="max-w-3xl text-[clamp(2.25rem,5vw,4.25rem)] leading-[0.98] font-semibold tracking-[-0.045em] text-balance"
         >
-          One studio for <span className="font-serif-accent text-accent-warm">every stage</span> of the funnel.
+          One studio. <span className="font-serif-accent text-accent-warm">Any industry.</span>
         </SplitReveal>
+        <p className="mt-6 max-w-xl text-pretty text-foreground/60">
+          Whatever you sell, the brief is the same: a goal, an audience and a market. Here&apos;s what that looks like in
+          practice.
+        </p>
 
         {/* Bento focus: hovering one card quietly dims the others. */}
         <ul className="mt-16 grid gap-10 md:grid-cols-3 md:gap-6 lg:gap-8 [@media(hover:hover)]:[&:has(li:hover)>li:not(:hover)]:opacity-45">
@@ -91,8 +94,18 @@ export function UseCases() {
             </li>
           ))}
         </ul>
-        <CtaLink href={FORM_URL} className="mt-14">
-          Start your project
+        <div className="mt-14 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+          <p className="text-sm text-foreground/50">Also for</p>
+          <ul className="flex flex-wrap gap-2">
+            {MORE_USE_CASES.map((item) => (
+              <li key={item} className="rounded-full px-3.5 py-1.5 text-sm text-foreground/70 ring-1 ring-line">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <CtaLink href={FORM_URL} className="mt-12">
+          Book a strategy call
         </CtaLink>
       </div>
     </section>

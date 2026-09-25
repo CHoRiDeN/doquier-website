@@ -52,7 +52,7 @@ export function SiteNav() {
         </ul>
 
         <CtaLink href={FORM_URL} arrow={false} fullWidthMobile={false} className="h-9 px-4 text-[13px]">
-          Start a project
+          Book a call
         </CtaLink>
       </nav>
     </header>

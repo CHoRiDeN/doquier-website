@@ -1,9 +1,9 @@
-import { COMPANY_SIZES, MONTHLY_AD_SPEND } from "@/lib/site";
+import { COMPANY_SIZES, GOALS, INDUSTRIES, MARKETS, MONTHLY_AD_SPEND, SERVICE_OPTIONS } from "@/lib/site";
 
 /**
- * Waitlist signup → Brevo.
+ * Strategy-call request → Brevo.
  * 1. Upserts the contact into the "Website leads" list.
- * 2. Creates a CRM company with size + monthly spend and links the contact to it.
+ * 2. Upserts a CRM company (by domain) with the qualifying answers and links the contact to it.
  *
  * Required env: BREVO_API_KEY, BREVO_LIST_ID.
  *
@@ -12,6 +12,8 @@ import { COMPANY_SIZES, MONTHLY_AD_SPEND } from "@/lib/site";
  * - number_of_employees (built-in, number): lower bound of that range, so it still filters and sorts.
  * - marketing_spend (custom, text): the spend range exactly as chosen.
  * - website / domain (built-in, text): normalised company URL and its bare domain.
+ * - industry (built-in, text): the sector chosen.
+ * - primary_goal, target_markets, services_interest (custom, text): lists are stored comma-separated.
  */
 const BREVO = "https://api.brevo.com/v3";
 
@@ -44,8 +46,18 @@ type Payload = {
   size?: unknown;
   spend?: unknown;
   website?: unknown;
+  goal?: unknown;
+  markets?: unknown;
+  services?: unknown;
+  industry?: unknown;
   nickname?: unknown; // honeypot
 };
+
+/** Keeps only strings that are valid options, in the order they were offered. */
+function pick(value: unknown, options: readonly string[]) {
+  const chosen = Array.isArray(value) ? value.filter((v): v is string => typeof v === "string") : [];
+  return options.filter((option) => chosen.includes(option));
+}
 
 function brevo(path: string, init: RequestInit & { apiKey: string }) {
   const { apiKey, ...rest } = init;
@@ -60,7 +72,7 @@ export async function POST(request: Request) {
   const apiKey = process.env.BREVO_API_KEY;
   const listId = Number(process.env.BREVO_LIST_ID);
   if (!apiKey || !listId) {
-    console.error("[waitlist] BREVO_API_KEY or BREVO_LIST_ID is not configured");
+    console.error("[book-a-call] BREVO_API_KEY or BREVO_LIST_ID is not configured");
     return Response.json({ error: "Signups are temporarily unavailable." }, { status: 503 });
   }
 
@@ -81,6 +93,10 @@ export async function POST(request: Request) {
   const size = typeof body.size === "string" ? body.size : "";
   const spend = typeof body.spend === "string" ? body.spend : "";
   const site = typeof body.website === "string" ? parseWebsite(body.website.slice(0, 200)) : null;
+  const goal = typeof body.goal === "string" ? body.goal : "";
+  const industry = typeof body.industry === "string" ? body.industry : "";
+  const markets = pick(body.markets, MARKETS);
+  const services = pick(body.services, SERVICE_OPTIONS);
 
   if (!company || !EMAIL_RE.test(email)) {
     return Response.json({ error: "Please enter your company name and a valid email." }, { status: 400 });
@@ -88,8 +104,15 @@ export async function POST(request: Request) {
   if (!site) {
     return Response.json({ error: "Please enter your company website, e.g. acme.com." }, { status: 400 });
   }
-  if (!(COMPANY_SIZES as readonly string[]).includes(size) || !(MONTHLY_AD_SPEND as readonly string[]).includes(spend)) {
-    return Response.json({ error: "Please choose your company size and monthly spend." }, { status: 400 });
+  if (!(GOALS as readonly string[]).includes(goal) || !markets.length || !services.length) {
+    return Response.json({ error: "Please choose a goal, at least one market and one service." }, { status: 400 });
+  }
+  if (
+    !(INDUSTRIES as readonly string[]).includes(industry) ||
+    !(COMPANY_SIZES as readonly string[]).includes(size) ||
+    !(MONTHLY_AD_SPEND as readonly string[]).includes(spend)
+  ) {
+    return Response.json({ error: "Please choose your sector, company size and monthly spend." }, { status: 400 });
   }
 
   // 1. Contact → list (updateEnabled makes this an upsert for returning visitors).
@@ -99,7 +122,7 @@ export async function POST(request: Request) {
     body: JSON.stringify({ email, listIds: [listId], updateEnabled: true }),
   });
   if (!contactRes.ok) {
-    console.error("[waitlist] contact upsert failed", contactRes.status, await contactRes.text());
+    console.error("[book-a-call] contact upsert failed", contactRes.status, await contactRes.text());
     return Response.json({ error: "Something went wrong. Please try again." }, { status: 502 });
   }
 
@@ -115,6 +138,10 @@ export async function POST(request: Request) {
       marketing_spend: spend,
       website: site.website,
       domain: site.domain,
+      industry,
+      primary_goal: goal,
+      target_markets: markets.join(", "),
+      services_interest: services.join(", "),
     };
 
     const filters = encodeURIComponent(JSON.stringify({ "attributes.domain": site.domain }));
@@ -131,14 +158,14 @@ export async function POST(request: Request) {
         // Re-sending `domain` trips Brevo's uniqueness check even for the same company, so omit it here.
         body: JSON.stringify({ attributes: { ...attributes, domain: undefined } }),
       });
-      if (!update.ok) console.error("[waitlist] company update failed", update.status, await update.text());
+      if (!update.ok) console.error("[book-a-call] company update failed", update.status, await update.text());
       if (contactId) {
         const link = await brevo(`/companies/link-unlink/${existing.id}`, {
           apiKey,
           method: "PATCH",
           body: JSON.stringify({ linkContactIds: [contactId] }),
         });
-        if (!link.ok) console.error("[waitlist] company link failed", link.status, await link.text());
+        if (!link.ok) console.error("[book-a-call] company link failed", link.status, await link.text());
       }
     } else {
       const create = await brevo("/companies", {
@@ -146,10 +173,10 @@ export async function POST(request: Request) {
         method: "POST",
         body: JSON.stringify({ name: company, attributes, ...(contactId ? { linkedContactsIds: [contactId] } : {}) }),
       });
-      if (!create.ok) console.error("[waitlist] company create failed", create.status, await create.text());
+      if (!create.ok) console.error("[book-a-call] company create failed", create.status, await create.text());
     }
   } catch (error) {
-    console.error("[waitlist] company step failed", error);
+    console.error("[book-a-call] company step failed", error);
   }
 
   return Response.json({ ok: true });

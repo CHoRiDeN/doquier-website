@@ -4,16 +4,27 @@ import Image from "next/image";
 import { useRef } from "react";
 import { CtaLink } from "@/components/motion/cta-link";
 import { LazyVideo } from "@/components/motion/lazy-video";
-import { ScrambleLabel } from "@/components/motion/scramble-label";
 import { SplitReveal } from "@/components/motion/split-reveal";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
-import { FORMATS, FORM_URL } from "@/lib/site";
+import { FORMATS, FORM_URL, LANGUAGES } from "@/lib/site";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-/** Pinned horizontal rail on desktop (Feature/Lens Rail), native swipe rail on touch. */
+/** The multiplier row: one brief fans out into formats × languages. */
+const FACTORS = [
+  { value: 1, label: "brief" },
+  { value: FORMATS.length, label: "formats" },
+  { value: LANGUAGES.length, label: "languages" },
+] as const;
+const TOTAL = FACTORS.reduce((product, f) => product * f.value, 1);
+
+/**
+ * Pinned horizontal rail on desktop (Feature/Lens Rail), native swipe rail on touch. After the rail,
+ * the multiplier shows how one brief becomes a whole library.
+ */
 export function Formats() {
   const ref = useRef<HTMLElement>(null);
+  const railRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
 
   useGSAP(
@@ -29,12 +40,32 @@ export function Formats() {
           stagger: 0.08,
           scrollTrigger: { trigger: q("[data-track]")[0], start: "top 85%", once: true },
         });
+
+        const row = q("[data-multiplier]")[0];
+        const tl = gsap.timeline({ scrollTrigger: { trigger: row, start: "top 85%", once: true } });
+        tl.from(q("[data-factor]"), { y: 30, autoAlpha: 0, stagger: 0.12, duration: 0.8 });
+        q("[data-count]").forEach((el) => {
+          const end = Number(el.dataset.count);
+          const counter = { value: 0 };
+          tl.to(
+            counter,
+            {
+              value: end,
+              duration: 1.6,
+              ease: "expo.out",
+              onUpdate: () => {
+                el.textContent = String(Math.round(counter.value));
+              },
+            },
+            0.5,
+          );
+        });
       });
 
       mm.add(`${MQ.motion} and ${MQ.desktop}`, () => {
         const track = q("[data-track]")[0] as HTMLElement;
         const distance = () => track.scrollWidth - window.innerWidth;
-        // Scroll length per pixel of travel: >1 gives each card more dwell time before the section unpins.
+        // Scroll length per pixel of travel: >1 gives each card more dwell time before the rail unpins.
         const SCROLL_PER_PX = 1.5;
         const cards = q("[data-card]");
 
@@ -42,12 +73,12 @@ export function Formats() {
           x: () => -distance(),
           ease: "none",
           scrollTrigger: {
-            trigger: ref.current,
+            trigger: railRef.current,
             pin: true,
             pinSpacing: true,
             start: "top top",
             end: () => `+=${distance() * SCROLL_PER_PX}`,
-            // No scrub lag: the rail must finish exactly as the section unpins (Lenis already smooths input).
+            // No scrub lag: the rail must finish exactly as it unpins (Lenis already smooths input).
             scrub: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
@@ -80,93 +111,124 @@ export function Formats() {
   );
 
   return (
-    <section
-      id="formats"
-      ref={ref}
-      aria-labelledby="formats-heading"
-      className="relative flex flex-col justify-center overflow-hidden py-24 lg:h-svh lg:py-0"
-    >
-      <div className="container-site mb-12 flex flex-col gap-8 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
-        <div className="">
-          
-          <SplitReveal
-            id="formats-heading"
-            className="text-[clamp(2.25rem,5vw,4.25rem)] leading-[0.98] font-semibold tracking-[-0.045em]"
-          >
-            Every format. <span className="font-serif-accent text-accent-warm">One studio.</span>
-          </SplitReveal>
-        </div>
+    <section id="formats" ref={ref} aria-labelledby="formats-heading" className="relative overflow-hidden">
+      <div ref={railRef} className="flex flex-col justify-center py-24 lg:h-svh lg:py-0">
+        <div className="container-site mb-12 flex flex-col gap-8 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <SplitReveal
+              id="formats-heading"
+              className="max-w-2xl text-[clamp(2.25rem,5vw,4.25rem)] leading-[0.98] font-semibold tracking-[-0.045em] text-balance"
+            >
+              Every format <span className="font-serif-accent text-accent-warm">your channels need.</span>
+            </SplitReveal>
+            <p className="mt-5 max-w-md text-pretty text-foreground/60">
+              All produced from the same brief and cut for every placement, so one idea becomes a whole library.
+            </p>
+          </div>
 
-        <div className="hidden flex-col items-end gap-8 lg:flex">
-          <CtaLink href={FORM_URL}>Get these formats</CtaLink>
-        <div aria-hidden className="flex w-64 items-center gap-4 font-mono text-xs text-muted-foreground">
-          <span className="tabular-nums text-foreground">
-            <span ref={counterRef}>01</span>
-          </span>
-          <span className="relative h-px flex-1 bg-line">
-            <span data-progress className="absolute inset-0 origin-left scale-x-0 bg-accent-warm" />
-          </span>
-          <span className="tabular-nums">{pad(FORMATS.length)}</span>
-        </div>
-        </div>
-      </div>
-
-      <div className="overflow-x-auto overscroll-x-contain [scrollbar-width:none] lg:overflow-visible [&::-webkit-scrollbar]:hidden">
-        <ul
-          data-track
-          className="flex w-max snap-x snap-mandatory gap-4 px-6 sm:gap-6 sm:px-10 lg:snap-none lg:gap-8 lg:px-[max(2.5rem,calc((100%-1200px)/2))]"
-        >
-          {FORMATS.map((format, i) => (
-            <li key={format.name} data-card className="w-[68vw] shrink-0 snap-start sm:w-[42vw] lg:w-auto">
-              <div className="relative aspect-[9/16] overflow-hidden rounded-2xl bg-muted ring-1 ring-line lg:h-[min(58svh,640px)]">
-                <div data-media className="absolute inset-0">
-                  {format.media.type === "video" ? (
-                    <LazyVideo
-                      src={format.media.src}
-                      poster={format.media.poster}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <Image
-                      src={format.media.src}
-                      alt={`${format.name} example`}
-                      fill
-                      sizes="(min-width: 1024px) 330px, 68vw"
-                      className="object-cover"
-                    />
-                  )}
-                </div>
-                <span className="absolute top-3 left-3 rounded-full bg-black/45 px-2.5 py-1 font-mono text-[10px] tracking-[0.14em] text-white/80 backdrop-blur-md">
-                  {pad(i + 1)}
-                </span>
-              </div>
-              <h3 className="mt-5 text-xl font-semibold tracking-[-0.03em]">{format.name}</h3>
-              <p className="mt-1.5 max-w-[30ch] text-sm leading-relaxed text-pretty text-foreground/55">
-                {format.description}
-              </p>
-            </li>
-          ))}
-
-          <li data-card className="flex w-[68vw] shrink-0 snap-start sm:w-[42vw] lg:w-[min(32.6svh,360px)]">
-            <div className="flex aspect-[9/16] w-full flex-col justify-between rounded-2xl border border-dashed border-foreground/15 p-6 lg:h-[min(58svh,640px)]">
-              <span className="font-mono text-[10px] tracking-[0.14em] text-muted-foreground">+</span>
-              <div>
-                <p className="text-2xl leading-tight font-semibold tracking-[-0.03em] text-balance">
-                  Need a format that isn&apos;t here?
-                </p>
-                <p className="mt-3 text-sm text-foreground/55">We&apos;ll build it around your funnel.</p>
-                <CtaLink href={FORM_URL} className="mt-6">
-                  Talk to us
-                </CtaLink>
-              </div>
+          <div className="hidden flex-col items-end gap-8 lg:flex">
+            <CtaLink href={FORM_URL}>Book a strategy call</CtaLink>
+            <div aria-hidden className="flex w-64 items-center gap-4 font-mono text-xs text-muted-foreground">
+              <span className="text-foreground tabular-nums">
+                <span ref={counterRef}>01</span>
+              </span>
+              <span className="relative h-px flex-1 bg-line">
+                <span data-progress className="absolute inset-0 origin-left scale-x-0 bg-accent-warm" />
+              </span>
+              <span className="tabular-nums">{pad(FORMATS.length)}</span>
             </div>
-          </li>
-        </ul>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto overscroll-x-contain [scrollbar-width:none] lg:overflow-visible [&::-webkit-scrollbar]:hidden">
+          <ul
+            data-track
+            className="flex w-max snap-x snap-mandatory gap-4 px-6 sm:gap-6 sm:px-10 lg:snap-none lg:gap-8 lg:px-[max(2.5rem,calc((100%-1200px)/2))]"
+          >
+            {FORMATS.map((format, i) => (
+              <li key={format.name} data-card className="w-[68vw] shrink-0 snap-start sm:w-[42vw] lg:w-auto">
+                <div className="relative aspect-[9/16] overflow-hidden rounded-2xl bg-muted ring-1 ring-line lg:h-[min(58svh,640px)]">
+                  <div data-media className="absolute inset-0">
+                    {format.media.type === "video" ? (
+                      <LazyVideo src={format.media.src} poster={format.media.poster} className="h-full w-full object-cover" />
+                    ) : (
+                      <Image
+                        src={format.media.src}
+                        alt={`${format.name} example`}
+                        fill
+                        sizes="(min-width: 1024px) 330px, 68vw"
+                        className="object-cover"
+                      />
+                    )}
+                  </div>
+                  <span className="absolute top-3 left-3 rounded-full bg-black/45 px-2.5 py-1 font-mono text-[10px] tracking-[0.14em] text-white/80 backdrop-blur-md">
+                    {pad(i + 1)}
+                  </span>
+                </div>
+                <h3 className="mt-5 text-xl font-semibold tracking-[-0.03em]">{format.name}</h3>
+                <p className="mt-1.5 max-w-[30ch] text-sm leading-relaxed text-pretty text-foreground/55">
+                  {format.description}
+                </p>
+              </li>
+            ))}
+
+            <li data-card className="flex w-[68vw] shrink-0 snap-start sm:w-[42vw] lg:w-[min(32.6svh,360px)]">
+              <div className="flex aspect-[9/16] w-full flex-col justify-between rounded-2xl border border-dashed border-foreground/15 p-6 lg:h-[min(58svh,640px)]">
+                <span className="font-mono text-[10px] tracking-[0.14em] text-muted-foreground">+</span>
+                <div>
+                  <p className="text-2xl leading-tight font-semibold tracking-[-0.03em] text-balance">
+                    Need a format that isn&apos;t here?
+                  </p>
+                  <p className="mt-3 text-sm text-foreground/55">We&apos;ll build it around your funnel.</p>
+                  <CtaLink href={FORM_URL} className="mt-6">
+                    Talk to us
+                  </CtaLink>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
 
-      {/* Below lg the CTA closes the section after the swipe rail; on desktop it sits in the header. */}
-      <div className="container-site mt-12 lg:hidden">
-        <CtaLink href={FORM_URL}>Get these formats</CtaLink>
+      <div className="container-site pb-32 sm:pb-44">
+        {/* The multiplier: why one brief turns into hundreds of pieces. */}
+        <div
+          data-multiplier
+          className="mt-20 flex flex-col gap-8 border-t border-line pt-12 lg:mt-28 lg:flex-row lg:items-end lg:justify-between"
+        >
+          <p className="flex flex-wrap items-end gap-x-3 gap-y-3 text-[clamp(2.5rem,6vw,5rem)] leading-none font-semibold tracking-[-0.05em] sm:gap-x-5">
+            {FACTORS.map((factor, i) => (
+              <span key={factor.label} data-factor className="flex items-end gap-3 sm:gap-5">
+                {i > 0 ? <span className="font-serif-accent text-foreground/35">×</span> : null}
+                <span className="flex flex-col">
+                  <span data-count={factor.value} className="tabular-nums">
+                    {factor.value}
+                  </span>
+                  <span className="mt-3 font-mono text-[9px] font-normal tracking-[0.12em] text-muted-foreground uppercase sm:text-[11px] sm:tracking-[0.16em]">
+                    {factor.label}
+                  </span>
+                </span>
+              </span>
+            ))}
+            <span data-factor className="flex items-end gap-3 sm:gap-5">
+              <span className="font-serif-accent text-foreground/35">=</span>
+              <span className="flex flex-col">
+                <span data-count={TOTAL} className="text-accent-warm tabular-nums">
+                  {TOTAL}
+                </span>
+                <span className="mt-3 font-mono text-[9px] font-normal tracking-[0.12em] text-accent-warm/80 uppercase sm:text-[11px] sm:tracking-[0.16em]">
+                  videos
+                </span>
+              </span>
+            </span>
+          </p>
+          <div className="flex flex-col gap-6 lg:items-end">
+            <p className="max-w-xs text-pretty text-foreground/60 lg:text-right">
+              And that&apos;s before a single hook or angle variation. This is how plans reach hundreds of videos a month.
+            </p>
+            <CtaLink href={FORM_URL}>Book a strategy call</CtaLink>
+          </div>
+        </div>
       </div>
     </section>
   );

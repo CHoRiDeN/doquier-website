@@ -2,7 +2,6 @@
 
 import { useId, useState } from "react";
 import { CtaLink } from "@/components/motion/cta-link";
-import { ScrambleLabel } from "@/components/motion/scramble-label";
 import { SplitReveal } from "@/components/motion/split-reveal";
 import { FAQ as ITEMS, FORM_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -25,7 +24,7 @@ export function Faq() {
           </SplitReveal>
           <p className="mt-6 max-w-xs text-pretty text-foreground/60">Still unsure? We&apos;ll answer anything else on a call.</p>
           <CtaLink href={FORM_URL} className="mt-8">
-            Talk to us
+            Book a strategy call
           </CtaLink>
         </div>
 

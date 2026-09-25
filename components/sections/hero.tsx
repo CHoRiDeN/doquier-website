@@ -3,8 +3,9 @@
 import { useRef } from "react";
 import { HeroVideos } from "@/components/hero-videos";
 import { CtaLink } from "@/components/motion/cta-link";
+import { TextRotate } from "@/components/motion/text-rotate";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
-import { CLIENTS, FORM_URL } from "@/lib/site";
+import { CLIENTS, FORM_URL, HERO_USE_CASES } from "@/lib/site";
 
 const delay = (s: number) => ({ animationDelay: `${s}s` });
 
@@ -44,42 +45,42 @@ export function Hero() {
       </div>
 
       <div data-hero-copy className="flex flex-1 flex-col items-center justify-center px-6 pt-20 text-center">
-        <div data-hero-exclude className="flex max-w-3xl flex-col items-center">
+        <div data-hero-exclude className="flex max-w-3xl flex-col items-center lg:max-w-5xl">
           <p
             className="hero-fade mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-background/40 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-foreground/70 backdrop-blur-md sm:mb-7 sm:gap-2.5 sm:px-3.5 sm:py-1.5 sm:text-[11px] sm:tracking-[0.18em]"
             style={delay(0)}
           >
             <span aria-hidden className="size-1 animate-pulse rounded-full bg-accent-warm sm:size-1.5" />
-            AI UGC studio for performance brands
+            Done-for-you AI content studio
           </p>
 
           <h1
             id="hero-heading"
             className="font-heading text-[clamp(2.5rem,6.5vw,5rem)] leading-[0.95] font-semibold tracking-[-0.045em] text-balance"
           >
-            <span className="hero-line">
+            <span className="hero-line lg:whitespace-nowrap">
               <span style={delay(0.06)}>
                 UGC that looks <span className="font-serif-accent pr-[0.04em] text-accent-warm">real.</span>
               </span>
             </span>
-            <span className="hero-line">
-              <span style={delay(0.14)}>Made on autopilot.</span>
+            <span className="hero-line lg:whitespace-nowrap">
+              <span style={delay(0.14)}>Planned, made and posted.</span>
             </span>
           </h1>
 
           <p
-            className="hero-fade mt-7 max-w-xl text-[clamp(1rem,1.4vw,1.125rem)] leading-relaxed text-pretty text-foreground/65"
+            className="hero-rise mt-7 max-w-2xl text-[clamp(1rem,1.4vw,1.125rem)] leading-relaxed text-pretty text-foreground/65"
             style={delay(0.3)}
           >
-            Doquier scripts, produces and delivers creator-style video ads with AI. Every format your media buyers need, in
-            every language.
+            Hundreds of videos a month, planned by strategists, produced with AI and published for you. For{" "}
+            <TextRotate words={HERO_USE_CASES} className="font-medium text-foreground" />, in every format and language.
           </p>
 
           <div className="hero-fade mt-10 flex flex-wrap items-center justify-center gap-3 max-sm:w-full" style={delay(0.42)}>
             <CtaLink href={FORM_URL} size="lg">
-              Start your project
+              Book a strategy call
             </CtaLink>
-            <CtaLink href="#formats" size="lg" variant="ghost" arrow={false}>
+            <CtaLink href="#use-cases" size="lg" variant="ghost" arrow={false}>
               See the work
             </CtaLink>
           </div>

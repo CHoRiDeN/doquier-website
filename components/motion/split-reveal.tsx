@@ -31,26 +31,40 @@ export function SplitReveal({
     () => {
       const mm = gsap.matchMedia();
       mm.add(MQ.motion, () => {
-        const split = SplitText.create(ref.current, {
-          type: by === "chars" ? "lines,words,chars" : "lines",
-          mask: "lines",
-          // Splitting lines keeps words intact, so the text stays readable as-is. Char splits need a label,
-          // which is only valid on headings.
-          aria: by === "chars" ? "auto" : "none",
-          autoSplit: true,
-          onSplit(self) {
-            const targets = by === "chars" ? self.chars : self.lines;
-            return gsap.from(targets, {
-              yPercent: 110,
-              rotate: by === "chars" ? 8 : 2,
-              duration: by === "chars" ? 1 : 1.2,
-              stagger: by === "chars" ? 0.018 : 0.09,
-              delay,
-              scrollTrigger: { trigger: ref.current, start, once: true },
+        let split: SplitText | undefined;
+        // Split lazily, a screen before the heading arrives: splitting every heading at once on load
+        // is a long layout task, and none of them are visible yet.
+        const io = new IntersectionObserver(
+          ([entry]) => {
+            if (!entry.isIntersecting || split) return;
+            io.disconnect();
+            split = SplitText.create(ref.current, {
+              type: by === "chars" ? "lines,words,chars" : "lines",
+              mask: "lines",
+              // Splitting lines keeps words intact, so the text stays readable as-is. Char splits need a label,
+              // which is only valid on headings.
+              aria: by === "chars" ? "auto" : "none",
+              autoSplit: true,
+              onSplit(self) {
+                const targets = by === "chars" ? self.chars : self.lines;
+                return gsap.from(targets, {
+                  yPercent: 110,
+                  rotate: by === "chars" ? 8 : 2,
+                  duration: by === "chars" ? 1 : 1.2,
+                  stagger: by === "chars" ? 0.018 : 0.09,
+                  delay,
+                  scrollTrigger: { trigger: ref.current, start, once: true },
+                });
+              },
             });
           },
-        });
-        return () => split.revert();
+          { rootMargin: "0px 0px 100% 0px" },
+        );
+        io.observe(ref.current!);
+        return () => {
+          io.disconnect();
+          split?.revert();
+        };
       });
     },
     { scope: ref },

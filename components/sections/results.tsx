@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { CtaLink } from "@/components/motion/cta-link";
-import { ScrambleLabel } from "@/components/motion/scramble-label";
 import { SplitReveal } from "@/components/motion/split-reveal";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
 import { FORM_URL, METRICS } from "@/lib/site";
@@ -81,7 +80,7 @@ export function Results() {
           </p>
         </div>
         <CtaLink href={FORM_URL} className="mt-14">
-          Start your project
+          Book a strategy call
         </CtaLink>
       </div>
     </section>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { Flag } from "@/components/flag";
 import { CtaLink } from "@/components/motion/cta-link";
 import { SoundVideo } from "@/components/motion/sound-video";
 import { SplitFlap } from "@/components/motion/split-flap";
@@ -8,32 +9,6 @@ import { SplitReveal } from "@/components/motion/split-reveal";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
 import { FORM_URL, LANGUAGE_EXAMPLES } from "@/lib/site";
 import { cn } from "@/lib/utils";
-
-type Code = (typeof LANGUAGE_EXAMPLES)[number]["code"];
-
-/** Stripes of each flag, top-to-bottom (horizontal) or left-to-right (vertical), as [colour, weight]. */
-const FLAGS: Record<Code, { vertical?: boolean; stripes: [string, number][] }> = {
-  DE: { stripes: [["#000000", 1], ["#dd0000", 1], ["#ffce00", 1]] },
-  IT: { vertical: true, stripes: [["#009246", 1], ["#ffffff", 1], ["#ce2b37", 1]] },
-  ES: { stripes: [["#aa151b", 1], ["#f1bf00", 2], ["#aa151b", 1]] },
-};
-
-function Flag({ code, label }: { code: Code; label: string }) {
-  const { vertical, stripes } = FLAGS[code];
-  const total = stripes.reduce((sum, [, w]) => sum + w, 0);
-  return (
-    <svg viewBox="0 0 30 20" role="img" aria-label={label} className="h-5 w-auto overflow-hidden rounded-[4px] ring-1 ring-white/15">
-      {stripes.map(([fill, weight], i) => {
-        const start = stripes.slice(0, i).reduce((sum, [, w]) => sum + w, 0);
-        return vertical ? (
-          <rect key={i} x={(start / total) * 30} y="0" width={(weight / total) * 30} height="20" fill={fill} />
-        ) : (
-          <rect key={i} x="0" y={(start / total) * 20} width="30" height={(weight / total) * 20} fill={fill} />
-        );
-      })}
-    </svg>
-  );
-}
 
 export function Languages() {
   const ref = useRef<HTMLElement>(null);

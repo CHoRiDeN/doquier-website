@@ -175,8 +175,9 @@
 .hero-line {
   display: block;
   overflow: hidden;
-  padding-bottom: 0.08em;
-  margin-bottom: -0.08em;
+  /* Room for descenders (the serif "p" in "posted") inside the reveal mask. */
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
 }
 .hero-line > span {
   display: block;
@@ -185,10 +186,20 @@
 .hero-fade {
   animation: hero-fade 1.2s var(--ease-out-expo) both;
 }
+/* Transform-only entrance for the hero's largest text block: it paints at full opacity immediately,
+   so it can count as the page's LCP instead of waiting for a fade to finish. */
+.hero-rise {
+  animation: hero-rise 1.2s var(--ease-out-expo) both;
+}
 
 @keyframes hero-line {
   from {
     transform: translateY(110%) rotate(2deg);
+  }
+}
+@keyframes hero-rise {
+  from {
+    transform: translateY(14px);
   }
 }
 @keyframes hero-fade {
@@ -275,7 +286,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero-line > span,
-  .hero-fade {
+  .hero-fade,
+  .hero-rise {
     animation: none;
   }
   .hero-video {
@@ -289,3 +301,28 @@
 }
 
 
+
+/* Globe market labels: pinned above their marker (CSS anchor positioning) and faded out when the
+   marker turns behind the globe. Browsers without anchor positioning simply don't show them. */
+.globe-label {
+  opacity: 0;
+}
+@supports (position-anchor: --a) {
+  .globe-label {
+    bottom: anchor(top);
+    left: anchor(center);
+    translate: -50% -8px;
+  }
+  .globe-label[data-side="bottom"] {
+    top: anchor(bottom);
+    bottom: auto;
+    translate: -50% 8px;
+  }
+  .globe-label {
+    opacity: var(--visible);
+    filter: blur(calc((1 - var(--visible)) * 6px));
+    transition:
+      opacity 0.3s,
+      filter 0.3s;
+  }
+}

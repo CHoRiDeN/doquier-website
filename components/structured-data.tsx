@@ -28,8 +28,8 @@ export function StructuredData() {
       {
         "@type": "Service",
         "@id": `${SITE_URL}/#service`,
-        name: "AI UGC video ad production",
-        serviceType: "AI-generated user-generated content (UGC) video ads",
+        name: "Done-for-you AI UGC content",
+        serviceType: "AI UGC content strategy, video production and social media distribution",
         description: SITE.description,
         provider: { "@id": ORG_ID },
         areaServed: { "@type": "Place", name: "Europe" },
