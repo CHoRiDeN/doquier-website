@@ -14,8 +14,8 @@ export const MONTHLY_AD_SPEND = [
   "€250k+",
 ] as const;
 
-/** Production origin. Set NEXT_PUBLIC_SITE_URL once the domain is final. */
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://doquier.com").replace(/\/$/, "");
+/** Production origin. Override with NEXT_PUBLIC_SITE_URL if needed. */
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.doquierlabs.com").replace(/\/$/, "");
 
 export const SITE = {
   name: "Doquier",
