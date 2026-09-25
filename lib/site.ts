@@ -77,6 +77,26 @@ export const SITE = {
   ],
 } as const;
 
+/** The company behind Doquier, as it appears in the legal pages and structured data. */
+export const LEGAL = {
+  company: "QUANTUMSHIFT LTD",
+  street: "Efesou 10",
+  locality: "Paralimni",
+  postalCode: "5280",
+  region: "Famagusta",
+  country: "Cyprus",
+  countryCode: "CY",
+  vat: "CY60073232P",
+  email: "scale@doquierlabs.com",
+  updated: "25 September 2026",
+} as const;
+
+export const LEGAL_LINKS = [
+  { label: "Privacy policy", href: "/privacy" },
+  { label: "Terms of use", href: "/terms" },
+  { label: "Responsible AI", href: "/responsible-ai" },
+] as const;
+
 export const NAV_LINKS = [
   { label: "Services", href: "#services" },
   { label: "How it works", href: "#process" },

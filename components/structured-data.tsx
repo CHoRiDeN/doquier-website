@@ -1,4 +1,4 @@
-import { FAQ, FORMATS, LANGUAGE_NAMES, SITE, SITE_URL } from "@/lib/site";
+import { FAQ, FORMATS, LANGUAGE_NAMES, LEGAL, SITE, SITE_URL } from "@/lib/site";
 
 const ORG_ID = `${SITE_URL}/#organization`;
 
@@ -11,6 +11,17 @@ export function StructuredData() {
         "@type": "Organization",
         "@id": ORG_ID,
         name: SITE.name,
+        legalName: LEGAL.company,
+        vatID: LEGAL.vat,
+        email: LEGAL.email,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: LEGAL.street,
+          addressLocality: LEGAL.locality,
+          postalCode: LEGAL.postalCode,
+          addressRegion: LEGAL.region,
+          addressCountry: LEGAL.countryCode,
+        },
         url: SITE_URL,
         logo: { "@type": "ImageObject", url: `${SITE_URL}/apple-icon`, width: 180, height: 180 },
         description: SITE.description,

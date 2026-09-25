@@ -7,6 +7,8 @@ import {
   FORM_URL,
   FORMATS,
   LANGUAGE_NAMES,
+  LEGAL,
+  LEGAL_LINKS,
   METRICS,
   PROCESS,
   SITE,
@@ -74,6 +76,11 @@ ${FAQ.map((f) => `### ${f.q}\n\n${f.a}`).join("\n\n")}
 
 - [Website](${SITE_URL}/): Landing page
 - [Book a strategy call](${SITE_URL}/${FORM_URL}): Contact form for new clients
+${LEGAL_LINKS.map((l) => `- [${l.label}](${SITE_URL}${l.href})`).join("\n")}
+
+## Company
+
+${SITE.name} is a trading name of ${LEGAL.company}, ${LEGAL.street}, ${LEGAL.postalCode} ${LEGAL.locality}, ${LEGAL.country}. VAT ${LEGAL.vat}. Contact: ${LEGAL.email}
 `;
 }
 

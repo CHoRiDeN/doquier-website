@@ -354,7 +354,11 @@ export function WaitlistModal() {
                 </button>
               </div>
               <p className="mt-4 text-center text-xs text-muted-foreground">
-                No spam. We&apos;ll only email you to schedule the call.
+                No spam. We&apos;ll only email you to schedule the call. See our{" "}
+                <a href="/privacy" target="_blank" className="underline underline-offset-2 hover:text-foreground">
+                  privacy policy
+                </a>
+                .
               </p>
             </form>
           </>
