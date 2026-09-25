@@ -16,9 +16,7 @@ export function Faq() {
     <section id="faq" aria-labelledby="faq-heading" className="py-32 sm:py-44">
       <div className="container-site grid gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-24">
         <div>
-          <ScrambleLabel className="mb-6" index="07">
-            FAQ
-          </ScrambleLabel>
+        
           <SplitReveal
             id="faq-heading"
             className="text-[clamp(2.25rem,5vw,4.25rem)] leading-[0.98] font-semibold tracking-[-0.045em] text-balance"

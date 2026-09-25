@@ -88,9 +88,7 @@ export function Formats() {
     >
       <div className="container-site mb-12 flex flex-col gap-8 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
         <div className="">
-          <ScrambleLabel className="mb-6" index="02">
-            Formats
-          </ScrambleLabel>
+          
           <SplitReveal
             id="formats-heading"
             className="text-[clamp(2.25rem,5vw,4.25rem)] leading-[0.98] font-semibold tracking-[-0.045em]"

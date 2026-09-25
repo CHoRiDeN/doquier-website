@@ -56,9 +56,7 @@ export function Process() {
     <section id="process" ref={ref} aria-labelledby="process-heading" className="py-32 sm:py-44">
       <div className="container-site grid gap-16 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
         <div className="lg:sticky lg:top-32 lg:self-start">
-          <ScrambleLabel className="mb-6" index="03">
-            How it works
-          </ScrambleLabel>
+       
           <h2
             id="process-heading"
             className="text-[clamp(2.25rem,5vw,4.25rem)] leading-[0.98] font-semibold tracking-[-0.045em] text-balance"

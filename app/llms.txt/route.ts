@@ -21,7 +21,7 @@ function render() {
 
 > ${SITE.description}
 
-${SITE.name} is a done-for-you service, not a self-serve tool: clients send a short brief and receive ready-to-run video ads. There is no public pricing; plans are tailored to monthly creative volume. To start, use the project form at ${SITE_URL}/#start.
+${SITE.name} is a done-for-you service, not a self-serve tool: clients send a short brief and receive ready-to-run video ads. There is no public pricing; plans are tailored to monthly creative volume. We are currently at capacity; prospective clients can join the waitlist at ${SITE_URL}/#waitlist.
 
 ## Key facts
 
@@ -55,7 +55,7 @@ ${FAQ.map((f) => `### ${f.q}\n\n${f.a}`).join("\n\n")}
 ## Links
 
 - [Website](${SITE_URL}/): Landing page
-- [Start a project](${SITE_URL}/#start): Contact form for new clients
+- [Join the waitlist](${SITE_URL}/#waitlist): Waitlist form for new clients
 `;
 }
 

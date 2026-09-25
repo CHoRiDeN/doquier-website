@@ -68,9 +68,7 @@ export function UseCases() {
   return (
     <section ref={ref} aria-labelledby="cases-heading" className="py-32 sm:py-44">
       <div className="container-site">
-        <ScrambleLabel className="mb-6" index="06">
-          Use cases
-        </ScrambleLabel>
+      
         <SplitReveal
           id="cases-heading"
           className="max-w-3xl text-[clamp(2.25rem,5vw,4.25rem)] leading-[0.98] font-semibold tracking-[-0.045em] text-balance"

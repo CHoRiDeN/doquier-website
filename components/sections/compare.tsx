@@ -90,9 +90,7 @@ export function Compare() {
       <div className="container-site">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
-            <ScrambleLabel className="mb-6" index="05">
-              Side by side
-            </ScrambleLabel>
+           
             <SplitReveal
               id="compare-heading"
               className="text-[clamp(2.25rem,5vw,4.25rem)] leading-[0.98] font-semibold tracking-[-0.045em] text-balance"

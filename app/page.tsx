@@ -9,6 +9,7 @@ import { Results } from "@/components/sections/results";
 import { SiteNav } from "@/components/sections/site-nav";
 import { UseCases } from "@/components/sections/use-cases";
 import { StructuredData } from "@/components/structured-data";
+import { WaitlistModal } from "@/components/waitlist-modal";
 
 export default function Home() {
   return (
@@ -32,6 +33,7 @@ export default function Home() {
         <Faq />
         <FinalCta />
       </main>
+      <WaitlistModal />
     </>
   );
 }

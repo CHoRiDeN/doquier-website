@@ -1,8 +1,18 @@
 /**
  * Single source of truth for landing-page content.
- * Every CTA on the page points to FORM_URL — swap it once the form exists.
+ * Every CTA links to FORM_URL; the waitlist modal intercepts these links (and a direct /#waitlist visit).
  */
-export const FORM_URL = "#start";
+export const FORM_URL = "#waitlist";
+
+/** Waitlist form options. Values are stored in Brevo exactly as written here. */
+export const COMPANY_SIZES = ["1–10", "11–50", "51–200", "201–500", "500+"] as const;
+export const MONTHLY_AD_SPEND = [
+  "Under €10k",
+  "€10k–€50k",
+  "€50k–€100k",
+  "€100k–€250k",
+  "€250k+",
+] as const;
 
 /** Production origin. Set NEXT_PUBLIC_SITE_URL once the domain is final. */
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://doquier.com").replace(/\/$/, "");

@@ -122,9 +122,7 @@ export function Results() {
   return (
     <section id="results" ref={ref} aria-labelledby="results-heading" className="py-32 sm:py-44">
       <div className="container-site">
-        <ScrambleLabel className="mb-6" index="04">
-          Results
-        </ScrambleLabel>
+       
         <SplitReveal
           id="results-heading"
           className="max-w-3xl text-[clamp(2.25rem,5vw,4.25rem)] leading-[0.98] font-semibold tracking-[-0.045em] text-balance"

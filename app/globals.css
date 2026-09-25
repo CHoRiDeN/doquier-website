@@ -223,6 +223,46 @@
   }
 }
 
+/* Waitlist dialog: slides up from the bottom over a blurred backdrop; exits back down. */
+.waitlist-dialog {
+  opacity: 0;
+  transform: translateY(24vh);
+  transition:
+    opacity 0.5s var(--ease-out-expo),
+    transform 0.8s var(--ease-out-expo),
+    overlay 0.5s allow-discrete,
+    display 0.5s allow-discrete;
+}
+.waitlist-dialog[open] {
+  opacity: 1;
+  transform: none;
+}
+@starting-style {
+  .waitlist-dialog[open] {
+    opacity: 0;
+    transform: translateY(24vh);
+  }
+}
+.waitlist-dialog::backdrop {
+  background: rgb(5 5 6 / 0);
+  backdrop-filter: blur(0);
+  transition:
+    background 0.45s var(--ease-out-expo),
+    backdrop-filter 0.45s var(--ease-out-expo),
+    overlay 0.45s allow-discrete,
+    display 0.45s allow-discrete;
+}
+.waitlist-dialog[open]::backdrop {
+  background: rgb(5 5 6 / 0.72);
+  backdrop-filter: blur(8px);
+}
+@starting-style {
+  .waitlist-dialog[open]::backdrop {
+    background: rgb(5 5 6 / 0);
+    backdrop-filter: blur(0);
+  }
+}
+
 /* FAQ accordion: animates to intrinsic height without JS measurement. */
 .faq-panel {
   display: grid;
@@ -241,7 +281,9 @@
   .hero-video {
     display: none;
   }
-  .faq-panel {
+  .faq-panel,
+  .waitlist-dialog,
+  .waitlist-dialog::backdrop {
     transition: none;
   }
 }
