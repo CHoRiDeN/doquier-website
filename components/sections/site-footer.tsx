@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRef } from "react";
 import { gsap, MQ, useGSAP } from "@/lib/gsap";
 import { FORM_URL, LEGAL, LEGAL_LINKS, NAV_LINKS } from "@/lib/site";
@@ -71,6 +72,11 @@ export function SiteFooter({ home = true }: { home?: boolean }) {
                   </a>
                 </li>
               ))}
+              <li>
+                <Link href="/compare" className={link}>
+                  Compare
+                </Link>
+              </li>
             </ul>
           </nav>
           <nav data-footer-col aria-label="Legal">
@@ -78,9 +84,9 @@ export function SiteFooter({ home = true }: { home?: boolean }) {
             <ul className="mt-5 grid gap-3 text-sm">
               {LEGAL_LINKS.map((item) => (
                 <li key={item.href}>
-                  <a href={item.href} className={link}>
+                  <Link href={item.href} className={link}>
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

@@ -22,11 +22,11 @@ const AI_AGENTS = [
 
 export default function robots(): MetadataRoute.Robots {
   return {
+    // Named groups replace the "*" group for those crawlers, so each one repeats the API rule.
     rules: [
-      { userAgent: "*", allow: "/" },
-      { userAgent: AI_AGENTS, allow: ["/", "/llms.txt"] },
+      { userAgent: "*", allow: "/", disallow: "/api/" },
+      { userAgent: AI_AGENTS, allow: ["/", "/llms.txt"], disallow: "/api/" },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
-    host: SITE_URL,
   };
 }

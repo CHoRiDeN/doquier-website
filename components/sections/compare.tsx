@@ -1,36 +1,17 @@
 "use client";
 
+import Link from "next/link";
 import { useRef } from "react";
+import { ComparisonCell } from "@/components/comparison-mark";
 import { CtaLink } from "@/components/motion/cta-link";
 import { LazyVideo } from "@/components/motion/lazy-video";
 import { SoundVideo } from "@/components/motion/sound-video";
 import { SplitReveal } from "@/components/motion/split-reveal";
 import { gsap, MQ, ScrollTrigger, useGSAP } from "@/lib/gsap";
-import { COMPARISON, COMPETITORS, FORM_URL } from "@/lib/site";
+import { COMPETITORS } from "@/lib/compare";
+import { COMPARISON, COMPETITORS as COMPETITOR_CLIPS, FORM_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
-function Cell({ value, highlight }: { value: string | boolean; highlight?: boolean }) {
-  if (typeof value === "boolean") {
-    return value ? (
-      <svg
-        viewBox="0 0 16 16"
-        className={cn("size-4", highlight ? "text-accent-warm" : "text-foreground/70")}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        role="img"
-        aria-label="Yes"
-      >
-        <path d="M3 8.5l3.2 3L13 4.5" />
-      </svg>
-    ) : (
-      <span className="text-foreground/30" role="img" aria-label="No">
-        —
-      </span>
-    );
-  }
-  return <span>{value}</span>;
-}
 
 export function Compare() {
   const ref = useRef<HTMLElement>(null);
@@ -131,7 +112,7 @@ export function Compare() {
           <div data-marquee className="flex w-max gap-4 sm:gap-5">
             {[0, 1].map((copy) => (
               <ul key={copy} aria-hidden={copy === 1} className="flex gap-4 sm:gap-5">
-                {COMPETITORS.map((c) => (
+                {COMPETITOR_CLIPS.map((c) => (
                   <li key={c.name} className="w-[38vw] max-w-[190px] shrink-0 sm:w-[170px]">
                     <div className="relative aspect-[9/16] overflow-hidden rounded-2xl bg-muted opacity-80 ring-1 ring-line saturate-[0.85]">
                       <LazyVideo src={c.src} poster={c.poster} rootMargin="0px" className="h-full w-full object-cover" />
@@ -181,13 +162,13 @@ export function Compare() {
                       i === COMPARISON.length - 1 && "rounded-b-2xl",
                     )}
                   >
-                    <Cell value={row.doquier} highlight />
+                    <ComparisonCell value={row.doquier} mark="yes" highlight />
                   </td>
                   <td className="px-6 py-5 text-foreground/60">
-                    <Cell value={row.tools} />
+                    <ComparisonCell value={row.tools} mark={row.marks.tools} />
                   </td>
                   <td className="px-6 py-5 text-foreground/60">
-                    <Cell value={row.creators} />
+                    <ComparisonCell value={row.creators} mark={row.marks.creators} />
                   </td>
                 </tr>
               ))}
@@ -197,6 +178,18 @@ export function Compare() {
         <CtaLink href={FORM_URL} className="mt-12">
           Book a strategy call
         </CtaLink>
+        <p className="mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-foreground/50">
+          Detailed comparisons:
+          {COMPETITORS.map((c) => (
+            <Link
+              key={c.slug}
+              href={`/compare/${c.slug}`}
+              className="text-foreground/75 underline decoration-line underline-offset-4 transition-colors hover:text-foreground hover:decoration-accent-warm"
+            >
+              vs {c.name}
+            </Link>
+          ))}
+        </p>
       </div>
     </section>
   );

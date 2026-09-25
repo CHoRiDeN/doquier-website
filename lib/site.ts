@@ -1,3 +1,5 @@
+import type { Mark } from "@/components/comparison-mark";
+
 /**
  * Single source of truth for landing-page content.
  * Every CTA links to FORM_URL; the strategy-call modal intercepts these links (and a direct /#book-a-call visit).
@@ -89,6 +91,8 @@ export const LEGAL = {
   vat: "CY60073232P",
   email: "scale@doquierlabs.com",
   updated: "25 September 2026",
+  /** Same date as `updated`, for the sitemap. */
+  updatedISO: "2026-09-25",
 } as const;
 
 export const LEGAL_LINKS = [
@@ -340,15 +344,70 @@ export const COMPETITORS = [
 
 type Cell = string | boolean;
 
-export const COMPARISON: { label: string; doquier: Cell; tools: Cell; creators: Cell }[] = [
-  { label: "Looks native to the feed", doquier: true, tools: "Depends on your prompts", creators: true },
-  { label: "Strategy & content plan", doquier: "Included", tools: "You write it", creators: "Extra cost" },
-  { label: "Tool to learn", doquier: "None, it's done for you", tools: "Weeks to master", creators: "None" },
-  { label: "Monthly volume", doquier: "Hundreds of videos", tools: "Limited by your team's hours", creators: "A handful" },
-  { label: "Languages & markets", doquier: "8+ languages, cast locally", tools: "One at a time, by hand", creators: "One creator per market" },
-  { label: "Distribution", doquier: "Included, optional", tools: false, creators: "Rarely" },
-  { label: "Cost per video", doquier: "Up to 80% less", tools: "Subscription + your team's hours", creators: "€150–500+" },
-  { label: "Usage rights", doquier: "Perpetual, every channel", tools: "Varies by plan", creators: "Negotiated, time-limited" },
+/** Each row also scores the two alternatives; Doquier's column is always a check. */
+export const COMPARISON: {
+  label: string;
+  doquier: Cell;
+  tools: Cell;
+  creators: Cell;
+  marks: { tools: Mark; creators: Mark };
+}[] = [
+  {
+    label: "Looks native to the feed",
+    doquier: true,
+    tools: "Depends on your prompts",
+    creators: true,
+    marks: { tools: "partial", creators: "yes" },
+  },
+  {
+    label: "Strategy & content plan",
+    doquier: "Included",
+    tools: "You write it",
+    creators: "Extra cost",
+    marks: { tools: "no", creators: "partial" },
+  },
+  {
+    label: "Tool to learn",
+    doquier: "None, it's done for you",
+    tools: "Weeks to master",
+    creators: "None",
+    marks: { tools: "no", creators: "yes" },
+  },
+  {
+    label: "Monthly volume",
+    doquier: "Hundreds of videos",
+    tools: "Limited by your team's hours",
+    creators: "A handful",
+    marks: { tools: "partial", creators: "no" },
+  },
+  {
+    label: "Languages & markets",
+    doquier: "8+ languages, cast locally",
+    tools: "One at a time, by hand",
+    creators: "One creator per market",
+    marks: { tools: "partial", creators: "partial" },
+  },
+  {
+    label: "Distribution",
+    doquier: "Included, optional",
+    tools: false,
+    creators: "Rarely",
+    marks: { tools: "no", creators: "partial" },
+  },
+  {
+    label: "Cost per video",
+    doquier: "Up to 80% less",
+    tools: "Subscription + your team's hours",
+    creators: "€150–500+",
+    marks: { tools: "partial", creators: "no" },
+  },
+  {
+    label: "Usage rights",
+    doquier: "Perpetual, every channel",
+    tools: "Varies by plan",
+    creators: "Negotiated, time-limited",
+    marks: { tools: "partial", creators: "partial" },
+  },
 ];
 
 export const USE_CASES = [
