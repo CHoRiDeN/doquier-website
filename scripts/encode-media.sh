@@ -65,5 +65,12 @@ for pair in arcads.webm:arcads custmiqai.mp4:customiqai heygen-video.webm:heygen
   loop "$src" "$OUT/competitors/$name.mp4" 360 8
   poster "$src" 360 "$OUT/posters/competitor-$name.jpg"
 done
+# Language examples (originals live outside public/ so they are not deployed)
+mkdir -p "$OUT/languages"
+for pair in german:de:5 italian:it:3 spanish:es:5; do
+  IFS=: read -r src code at <<<"$pair"
+  full "media-src/languages/$src.mp4" "$OUT/languages/$code.mp4" 720
+  poster "$OUT/languages/$code.mp4" 720 "$OUT/posters/language-$code.jpg" "$at"
+done
 echo DONE
 du -sh "$OUT" "$OUT"/*

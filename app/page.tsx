@@ -3,6 +3,7 @@ import { Faq } from "@/components/sections/faq";
 import { FinalCta } from "@/components/sections/final-cta";
 import { Formats } from "@/components/sections/formats";
 import { Hero } from "@/components/sections/hero";
+import { Languages } from "@/components/sections/languages";
 import { Manifesto } from "@/components/sections/manifesto";
 import { Process } from "@/components/sections/process";
 import { Results } from "@/components/sections/results";
@@ -26,6 +27,7 @@ export default function Home() {
         <Hero />
         <Manifesto />
         <Formats />
+        <Languages />
         <Process />
         <Results />
         <Compare />

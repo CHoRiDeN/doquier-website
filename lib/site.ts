@@ -110,6 +110,31 @@ export const LANGUAGE_NAMES = [
   "Polish",
 ] as const;
 
+/** Example ads, each cast and voiced natively for its market. */
+export const LANGUAGE_EXAMPLES = [
+  {
+    code: "DE",
+    language: "German",
+    category: "Lifestyle",
+    src: "/media/languages/de.mp4",
+    poster: "/media/posters/language-de.jpg",
+  },
+  {
+    code: "IT",
+    language: "Italian",
+    category: "Beauty",
+    src: "/media/languages/it.mp4",
+    poster: "/media/posters/language-it.jpg",
+  },
+  {
+    code: "ES",
+    language: "Spanish",
+    category: "Tech",
+    src: "/media/languages/es.mp4",
+    poster: "/media/posters/language-es.jpg",
+  },
+] as const;
+
 export type Format = {
   name: string;
   description: string;
@@ -232,7 +257,7 @@ export const FAQ = [
   },
   {
     q: "Which languages and markets do you cover?",
-    a: "All major European languages, including English, Spanish, French, German, Italian, Portuguese, Dutch and Polish, with creators cast to look and sound local.",
+    a: "All major European languages, including English, Spanish, French, German, Italian, Portuguese, Dutch and Polish, with creators cast to look and sound local. Most other languages are available on request.",
   },
   {
     q: "What do you need from us?",
